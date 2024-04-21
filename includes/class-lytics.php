@@ -98,9 +98,10 @@ class Lytics
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		$this->loader->add_action('admin_menu', $plugin_admin, 'lytics_add_menu');
-		$this->loader->add_filter('plugin_action_links', $plugin_admin, 'lytics_plugin_settings_link');
+		$this->loader->add_filter('plugin_action_links_lytics/'.$this->get_plugin_name().'.php', $plugin_admin, 'lytics_plugin_settings_link');
 		$this->loader->add_action('admin_post_lytics_process_form', $plugin_admin, 'lytics_handle_form_submission');
 		$this->loader->add_action('admin_init', $plugin_admin, 'lytics_register_settings');
+		$this->loader->add_action('admin_post_lytics_delete_settings', $plugin_admin, 'lytics_delete_settings');
 	}
 
 	/**
@@ -113,6 +114,7 @@ class Lytics
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_tag_install');
 		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'lytics_greeting_shortcode');
 	}
 

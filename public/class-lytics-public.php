@@ -62,19 +62,6 @@ class Lytics_Public
 	 */
 	public function enqueue_styles()
 	{
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Lytics_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Lytics_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/lytics-public.css', array(), $this->version, 'all');
 	}
 
@@ -85,20 +72,41 @@ class Lytics_Public
 	 */
 	public function enqueue_scripts()
 	{
+		wp_enqueue_script($this->plugin_name.'-public', plugin_dir_url(__FILE__) . 'js/lytics-public.js', array('jquery'), $this->version, false);
+	}
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Lytics_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Lytics_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+	public function enqueue_tag_install()
+	{
+		$account_id = get_option('lytics_account_id');
+		$tag_enabled = get_option('lytics_enable_tag');
+    $custom_config = get_option('lytics_tag_config');
+		$debug_mode = get_option('lytics_debug_mode');
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lytics-public.js', array('jquery'), $this->version, false);
+		if (!$tag_enabled) {
+			return;
+		}
+
+		if (!$account_id) {
+			return;
+		}
+
+		if (!$custom_config) {
+			$custom_config = '{}';
+		}
+
+		// decode the custom config json
+		$custom_config = json_decode($custom_config, true);
+		$js_file = $debug_mode ? 'latest.js' : 'latest.min.js';
+		$custom_config['src'] = 'https://c.lytics.io/api/tag/' . $account_id . '/' . $js_file;
+
+		$config = array(
+				'config' => json_encode($custom_config)
+		);
+
+		wp_enqueue_script($this->plugin_name.'-tag-install', plugin_dir_url(__FILE__) . 'js/lytics-tag-install.js', array(), $this->version, false);
+
+
+		wp_localize_script($this->plugin_name.'-tag-install', 'lytics_tag_vars', $config);
 	}
 
 	public function lytics_greeting_shortcode()

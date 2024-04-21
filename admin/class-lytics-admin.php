@@ -123,7 +123,7 @@ class Lytics_Admin
 
 	public function lytics_plugin_settings_link($links)
 	{
-		$settings_link = '<a href="admin.php?page=lytics_settings">Settings</a>'; // Corrected URL
+		$settings_link = '<a href="admin.php?page=lytics_settings">Settings</a>';
 		array_unshift($links, $settings_link);
 		return $links;
 	}
@@ -198,7 +198,8 @@ class Lytics_Admin
 					'name' => $data['data'][0]['name'],
 					'id' => $data['data'][0]['id'],
 					'domain' => $data['data'][0]['domain'],
-					'aid' => $data['data'][0]['aid']
+					'aid' => $data['data'][0]['aid'],
+					'packages' => $data['data'][0]['packages'],
 				];
 			}
 		} else {
@@ -220,5 +221,33 @@ class Lytics_Admin
 		register_setting('lytics_settings_group', 'lytics_account_id');
 		register_setting('lytics_settings_group', 'lytics_aid');
 		register_setting('lytics_settings_group', 'lytics_domain');
+	}
+
+	public function lytics_reset_settings()
+	{
+		if (!current_user_can('manage_options')) {
+			wp_die(__('You do not have sufficient permissions to access this page.'));
+		}
+	}
+
+	public function lytics_delete_settings() {
+		// Check if user has permission to delete settings
+		if (!current_user_can('manage_options')) {
+			wp_die(__('You do not have sufficient permissions to access this page.'));
+		}
+
+		// Delete all options related to your plugin
+		delete_option('lytics_access_token');
+		delete_option('lytics_account_name');
+		delete_option('lytics_account_id');
+		delete_option('lytics_aid');
+		delete_option('lytics_domain');
+		delete_option('lytics_enable_tag');
+		delete_option('lytics_debug_mode');
+		delete_option('lytics_ignore_admin_users');
+		delete_option('lytics_tag_config');
+
+		wp_redirect(admin_url('admin.php?page=lytics_settings'));
+		exit;
 	}
 }
