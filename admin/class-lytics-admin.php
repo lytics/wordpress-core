@@ -83,6 +83,21 @@ class Lytics_Admin
 	{
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/lytics-admin.js', array('jquery'), $this->version, false);
 
+		// Enqueue the Lytics Widget Wizard script with a unique handle and set as module
+		wp_enqueue_script(
+			$this->plugin_name . '-widget-wizard',
+			plugin_dir_url(__FILE__) . 'js/lytics-widget-wizard.js',
+			array('jquery'),
+			$this->version,
+			false
+		);
+		add_filter('script_loader_tag', function ($tag, $handle) {
+			if ($handle === $this->plugin_name . '-widget-wizard') {
+				return str_replace('<script ', '<script type="module" ', $tag);
+			}
+			return $tag;
+		}, 10, 2);
+
 		// Bootstrap CSS
 		wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
 
@@ -108,7 +123,7 @@ class Lytics_Admin
 			'Lytics', // Menu title
 			'manage_options', // Capability required to access menu item
 			'lytics_settings', // Menu slug
-			array($this, 'lytics_settings_page'), // Callback function to render the page content
+			null // Callback function to render the page content
 		);
 
 		add_submenu_page(
@@ -118,6 +133,14 @@ class Lytics_Admin
 			'manage_options', // Capability required to access menu item
 			'lytics_settings', // Menu slug
 			array($this, 'lytics_settings_page') // Callback function to render the page content
+		);
+
+		add_submenu_page(
+			'lytics_settings', // Parent slug
+			'Widgets', // Page title
+			'Widgets', // Menu title
+			'manage_options', // Capability required to access menu item
+			'edit.php?post_type=widget' // Menu slug
 		);
 	}
 
@@ -210,6 +233,173 @@ class Lytics_Admin
 		return FALSE;
 	}
 
+	public function register_widget_post_type()
+	{
+		$labels = array(
+			'name'               => _x('Widgets', 'post type general name', 'lytics'),
+			'singular_name'      => _x('Widget', 'post type singular name', 'lytics'),
+			'menu_name'          => _x('Widgets', 'admin menu', 'lytics'),
+			'name_admin_bar'     => _x('Widget', 'add new on admin bar', 'lytics'),
+			'add_new'            => _x('Add New', 'widget', 'lytics'),
+			'add_new_item'       => __('Add New Widget', 'lytics'),
+			'new_item'           => __('New Widget', 'lytics'),
+			'edit_item'          => __('Edit Widget', 'lytics'),
+			'view_item'          => __('View Widget', 'lytics'),
+			'all_items'          => __('All Widgets', 'lytics'),
+			'search_items'       => __('Search Widgets', 'lytics'),
+			'parent_item_colon'  => __('Parent Widgets:', 'lytics'),
+			'not_found'          => __('No widgets found.', 'lytics'),
+			'not_found_in_trash' => __('No widgets found in Trash.', 'lytics'),
+		);
+
+		$args = array(
+			'labels'             => $labels,
+			'public'             => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => false, // We will add a submenu later
+			'query_var'          => true,
+			'rewrite'            => array('slug' => 'widget'),
+			'capability_type'    => 'post',
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_position'      => null,
+			'supports'           => array('title', 'editor'),
+		);
+
+		// Register custom post type
+		register_post_type('widget', $args);
+
+		// Remove Quick Edit link for the custom post type
+		add_filter('post_row_actions', function ($actions) {
+			global $post;
+
+			if ($post->post_type === 'widget') {
+				unset($actions['inline hide-if-no-js']);
+			}
+
+			return $actions;
+		}, 10, 1);
+	}
+
+	public function add_widget_meta_boxes()
+	{
+		add_meta_box(
+			'lytics_widget_meta',
+			'Configuration',
+			array($this, 'lytics_widget_meta_box'),
+			'widget',
+			'normal',
+			'high'
+		);
+	}
+
+	public function lytics_widget_meta_box($post)
+	{
+		// Add a nonce field so we can check for it later.
+		wp_nonce_field('lytics_widget_meta_box', 'lytics_widget_meta_box_nonce');
+
+		// Retrieve existing values from the database.
+		$config_value = get_post_meta($post->ID, '_lytics_widget_configuration', true);
+		$status_value = get_post_meta($post->ID, '_lytics_widget_status', true);
+		$description_value = get_post_meta($post->ID, '_lytics_widget_description', true);
+
+		// If no configuration is set, set a default value
+		if (empty($config_value)) {
+			$config_value = '';
+		} else {
+			$config_value = base64_encode($config_value);
+		}
+
+		// Output the fields.
+		echo '<div>';
+		echo '<div>';
+		echo '<lytics-widgetwiz accountid="d54abf06a9ea7e2ab4ccd2dbaa55df2b" accesstoken="" pathforaconfig="' . $config_value . '" availableaudiences="W3sibGFiZWwiOiJBbGwiLCJ2YWx1ZSI6ImFsbCIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6IkFub255bW91cyBQcm9maWxlcyAtIDMwIGRheXMiLCJ2YWx1ZSI6ImFub255bW91c19wcm9maWxlc18zMF9kYXlzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJBbm9ueW1vdXMgUHJvZmlsZXMgLSA2MCBkYXlzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXNfNjBfZGF5cyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIC0gOTAgZGF5cyIsInZhbHVlIjoiYW5vbnltb3VzX3Byb2ZpbGVzXzkwX2RheXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Iktub3duIFByb2ZpbGVzIiwidmFsdWUiOiJrbm93bl9wcm9maWxlcyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiTHl0aWNzIEN1cnJlbnRseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfYWN0aXZlIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgRGlzZW5nYWdlZCIsInZhbHVlIjoic210X2Rvcm1hbnQiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBIaWdobHkgRW5nYWdlZCIsInZhbHVlIjoic210X3Bvd2VyIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgTmV3IiwidmFsdWUiOiJzbXRfbmV3IiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgUHJldmlvdXNseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfaW5hY3RpdmUiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBVbnNjb3JlZCIsInZhbHVlIjoic210X3Vuc2NvcmVkIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJVbmhlYWx0aHkgUHJvZmlsZXMiLCJ2YWx1ZSI6ImRlZmF1bHRfdW5oZWFsdGh5X3Byb2ZpbGVzIiwidHlwZSI6InN0cmluZyJ9XQ=="availablecollections="W3sibGFiZWwiOiJBbGwgRG9jdW1lbnRzIiwidmFsdWUiOiJhbGxfZG9jdW1lbnRzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJDb250ZW50IFdpdGggSW1hZ2VzIiwidmFsdWUiOiJjb250ZW50X3dpdGhfaW1hZ2VzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJEZWZhdWx0IFJlY29tbWVuZGF0aW9uIENvbGxlY3Rpb24iLCJ2YWx1ZSI6ImRlZmF1bHRfcmVjb21tZW5kYXRpb25zIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJFbmdsaXNoIENvbnRlbnQgV2l0aCBJbWFnZXMiLCJ2YWx1ZSI6ImVuZ2xpc2hfY29udGVudF93aXRoX2ltYWdlcyIsInR5cGUiOiJzdHJpbmcifV0=" titlefield="title" descriptionfield="lytics_widget_description" statusfield="lytics_widget_status" configurationfield="lytics_widget_configuration"></lytics-widgetwiz>';
+		echo '</div>';
+		echo '<textarea style="display:none;" id="lytics_widget_configuration" name="lytics_widget_configuration" rows="4" cols="50">' . esc_textarea($config_value) . '</textarea>';
+		echo '<input type="text" style="display:none;" id="lytics_widget_status" name="lytics_widget_status" value="' . esc_attr($status_value) . '" size="25" />';
+		echo '<textarea id="lytics_widget_description" style="display:none;" name="lytics_widget_description" rows="4" cols="50">' . esc_textarea($description_value) . '</textarea>';
+		echo '</div>';
+		echo '<script>document.querySelector(\'#titlediv\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
+	}
+
+	public function save_widget_meta_box_data($post_id)
+	{
+		if (!isset($_POST['lytics_widget_meta_box_nonce'])) {
+			return $post_id;
+		}
+
+		$nonce = $_POST['lytics_widget_meta_box_nonce'];
+
+		if (!wp_verify_nonce($nonce, 'lytics_widget_meta_box')) {
+			return $post_id;
+		}
+
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+			return $post_id;
+		}
+
+		if ('page' === $_POST['post_type']) {
+			if (!current_user_can('edit_page', $post_id)) {
+				return $post_id;
+			}
+		} else {
+			if (!current_user_can('edit_post', $post_id)) {
+				return $post_id;
+			}
+		}
+
+		if (isset($_POST['lytics_widget_description'])) {
+			$new_config_value = sanitize_text_field($_POST['lytics_widget_description']);
+			update_post_meta($post_id, 'lytics_widget_description', $new_config_value);
+		}
+
+		if (isset($_POST['lytics_widget_configuration'])) {
+			$new_config_value = sanitize_text_field($_POST['lytics_widget_configuration']);
+			update_post_meta($post_id, '_lytics_widget_configuration', $new_config_value);
+		}
+
+		if (isset($_POST['lytics_widget_status'])) {
+			$new_status_value = sanitize_text_field($_POST['lytics_widget_status']);
+			update_post_meta($post_id, '_lytics_widget_status', $new_status_value);
+		}
+	}
+
+	public function register_lytics_recommendations_block()
+	{
+		// Register the block editor script.
+		wp_register_script(
+			'lytics-recommendations-editor-script',
+			plugins_url('js/lytics-recommendations-block.js', __FILE__),
+			array('wp-blocks', 'wp-element', 'wp-editor'),
+			filemtime(plugin_dir_path(__FILE__) . 'js/lytics-recommendations-block.js')
+		);
+
+		// Register the block type.
+		register_block_type('lytics/recommendations', array(
+			'editor_script' => 'lytics-recommendations-editor-script',
+		));
+	}
+
+	public function hide_default_widget_editor()
+	{
+		$post_type = 'widget';
+
+		// Check if the current post type matches
+		if (is_admin() && isset($_GET['post_type']) && $_GET['post_type'] === $post_type) {
+			remove_post_type_support($post_type, 'editor');
+		}
+
+		// Additionally, check if the current post matches
+		if (is_admin() && isset($_GET['post'])) {
+			$post_id = intval($_GET['post']);
+			$post = get_post($post_id);
+			if ($post && $post->post_type === $post_type) {
+				remove_post_type_support($post_type, 'editor');
+			}
+		}
+	}
+
 	public function lytics_register_settings()
 	{
 		register_setting('lytics_settings_group', 'lytics_access_token');
@@ -230,7 +420,8 @@ class Lytics_Admin
 		}
 	}
 
-	public function lytics_delete_settings() {
+	public function lytics_delete_settings()
+	{
 		// Check if user has permission to delete settings
 		if (!current_user_can('manage_options')) {
 			wp_die(__('You do not have sufficient permissions to access this page.'));

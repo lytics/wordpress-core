@@ -98,10 +98,19 @@ class Lytics
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		$this->loader->add_action('admin_menu', $plugin_admin, 'lytics_add_menu');
-		$this->loader->add_filter('plugin_action_links_lytics/'.$this->get_plugin_name().'.php', $plugin_admin, 'lytics_plugin_settings_link');
+		$this->loader->add_filter('plugin_action_links_lytics/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lytics_plugin_settings_link');
 		$this->loader->add_action('admin_post_lytics_process_form', $plugin_admin, 'lytics_handle_form_submission');
 		$this->loader->add_action('admin_init', $plugin_admin, 'lytics_register_settings');
 		$this->loader->add_action('admin_post_lytics_delete_settings', $plugin_admin, 'lytics_delete_settings');
+
+		// Widget
+		$this->loader->add_action('init', $plugin_admin, 'register_widget_post_type');
+		$this->loader->add_action('init', $plugin_admin, 'hide_default_widget_editor');
+		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_widget_meta_boxes');
+		$this->loader->add_action('save_post', $plugin_admin, 'save_widget_meta_box_data');
+
+		// Gutenberg
+		$this->loader->add_action('init', $plugin_admin, 'register_lytics_recommendations_block');
 	}
 
 	/**

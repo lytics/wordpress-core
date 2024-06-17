@@ -59,9 +59,6 @@ if (typeof lytics_tag_vars === "undefined") {
   if (_lytics_tag_config) {
     try {
       var config = JSON.parse(_lytics_tag_config);
-
-      console.log(config);
-
       jstag.init(config);
       jstag.pageView();
     } catch (e) {
