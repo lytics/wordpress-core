@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "ESNext",
+    "strict": false,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "jsx": "react"
+  },
+  "include": [
+    "src/admin/js/**/*.ts",
+    "src/public/js/**/*.ts", 
+  ]
+}
