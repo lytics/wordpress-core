@@ -7,10 +7,16 @@
     "allowJs": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "jsx": "react"
+    "jsx": "react",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": ["node", "@wordpress/blocks", "@wordpress/i18n", "@wordpress/element"]
   },
   "include": [
     "src/admin/js/**/*.ts",
-    "src/public/js/**/*.ts", 
-  ]
+    "src/public/js/**/*.ts",
+    "global.d.ts"
+  ],
 }

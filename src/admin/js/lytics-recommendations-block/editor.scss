@@ -1,0 +1,43 @@
+.rec-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 25px;
+
+  .rec-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex: 1 1 0;
+    margin-right: 0;
+
+    .rec-img-container {
+      width: 100%;
+      position: relative;
+      padding-top: 56.25%;
+      overflow: hidden;
+      cursor: default;
+
+      .rec-img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+      }
+    }
+
+    .rec-title {
+      margin-top: 10px;
+
+      a {
+        text-decoration: none;
+
+        strong {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

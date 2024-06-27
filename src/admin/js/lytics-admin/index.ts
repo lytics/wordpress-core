@@ -1,7 +1,8 @@
 import jQuery from "jquery";
+import { message } from "./test";
 
 (function ($) {
   "use strict";
 
-  console.log("Hello World");
+  console.log(message);
 })(jQuery);

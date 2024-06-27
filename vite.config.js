@@ -3,42 +3,9 @@ import react from "@vitejs/plugin-react";
 import path, { resolve } from "path";
 import typescript from "@rollup/plugin-typescript";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-// import sass from "sass";
-// import fs from "fs";
 
 const rootDir = resolve(__dirname);
 const outDir = resolve(rootDir, "dist");
-
-// function compileSCSS() {
-//   const scssPath = path.resolve(__dirname, "styles/main.scss");
-//   const cssPath = path.resolve(__dirname, `${outDir}/css/core.css`);
-
-//   const compile = () => {
-//     sass.render({ file: scssPath }, (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         return;
-//       }
-//       fs.mkdirSync(path.dirname(cssPath), { recursive: true });
-//       fs.writeFileSync(cssPath, result.css);
-//     });
-//   };
-
-//   return {
-//     name: "compile-scss",
-//     buildStart() {
-//       compile();
-//     },
-//     handleHotUpdate({ file, server }) {
-//       if (file.endsWith(".scss")) {
-//         compile();
-//         server.ws.send({
-//           type: "full-reload",
-//         });
-//       }
-//     },
-//   };
-// }
 
 export default defineConfig({
   esbuild: {
@@ -52,13 +19,16 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    // compileSCSS(),
     typescript({
       tsconfig: "./tsconfig.json",
     }),
     viteStaticCopy({
       targets: [
         // root files
+        {
+          src: "./dist/admin/js/lytics-recommendation-render.js",
+          dest: "./public/js",
+        },
         {
           src: ".gitignore",
           dest: ".",
@@ -109,21 +79,17 @@ export default defineConfig({
           src: "./src/backup",
           dest: ".",
         },
-        // admin/css
-        // admin/img
-        // admin/js
-
-        // public files
-
-        // backup files
-
-        // include files
       ],
     }),
   ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {},
     },
   },
   build: {
@@ -133,11 +99,15 @@ export default defineConfig({
       input: {
         "lytics-admin": path.resolve(
           __dirname,
-          "./src/admin/js/lytics-admin/index.ts"
+          "./src/admin/js/lytics-admin/index.js"
         ),
         "lytics-recommendations-block": path.resolve(
           __dirname,
-          "./src/admin/js/lytics-recommendations-block/index.js"
+          "./src/admin/js/lytics-recommendations-block/index.ts"
+        ),
+        "lytics-recommendation-render": path.resolve(
+          __dirname,
+          "./src/admin/js/lytics-recommendations-block/view.ts"
         ),
         "lytics-pathfora-helper": path.resolve(
           __dirname,
@@ -158,6 +128,8 @@ export default defineConfig({
             return "admin/js/lytics-admin.js";
           } else if (chunkInfo.name === "lytics-recommendations-block") {
             return "admin/js/lytics-recommendations-block.js";
+          } else if (chunkInfo.name === "lytics-recommendation-render") {
+            return "admin/js/lytics-recommendation-render.js";
           } else if (chunkInfo.name === "lytics-pathfora-helper") {
             return "admin/js/pathforaHelper.js";
           } else if (chunkInfo.name === "lytics-pathfora-interface") {
@@ -165,6 +137,12 @@ export default defineConfig({
           } else if (chunkInfo.name === "lytics-widget-wizard") {
             return "admin/js/lytics-widget-wizard.js";
           }
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith(".css")) {
+            return "assets/[name].css";
+          }
+          return "assets/[name].[ext]";
         },
       },
     },

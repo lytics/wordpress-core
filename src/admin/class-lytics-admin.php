@@ -91,12 +91,27 @@ class Lytics_Admin
 			$this->version,
 			false
 		);
+
+		// Enqueue recommendation renderer
+		wp_enqueue_script(
+			$this->plugin_name . '-recommendation-renderer',
+			plugin_dir_url(__FILE__) . 'js/lytics-recommendation-render.js',
+			array('jquery'),
+			$this->version,
+			false
+		);
+
 		add_filter('script_loader_tag', function ($tag, $handle) {
 			if ($handle === $this->plugin_name . '-widget-wizard') {
 				return str_replace('<script ', '<script type="module" ', $tag);
 			}
+			if ($handle === $this->plugin_name . '-recommendation-renderer') {
+				return str_replace('<script ', '<script type="module" ', $tag);
+			}
+
 			return $tag;
 		}, 10, 2);
+
 
 		// Bootstrap CSS
 		wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
@@ -123,7 +138,9 @@ class Lytics_Admin
 			'Lytics', // Menu title
 			'manage_options', // Capability required to access menu item
 			'lytics_settings', // Menu slug
-			null // Callback function to render the page content
+			null, // Callback function to render the page content
+			'data:image/svg+xml;base64,' . base64_encode('<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.99186 9.28415C5.12491 9.28415 4.28416 8.83211 3.82338 8.0263C3.13986 6.8296 3.55478 5.30533 4.75148 4.62181L9.97505 1.63442C11.1718 0.950898 12.696 1.36581 13.3795 2.56252C14.0631 3.75922 13.6482 5.28349 12.4514 5.96919L7.23006 8.9544C6.83916 9.17715 6.41333 9.28415 5.99186 9.28415Z" fill="white"/><path d="M5.99186 16.4231C5.12491 16.4231 4.28416 15.971 3.82338 15.1652C3.13986 13.9685 3.55478 12.4443 4.75148 11.7607L9.97287 8.77553C11.1696 8.09201 12.6938 8.50693 13.3774 9.70363C14.0631 10.8982 13.6481 12.4246 12.4514 13.1081L7.23006 16.0933C6.83916 16.3183 6.41333 16.4231 5.99186 16.4231Z" fill="white"/><path d="M10.2848 21.2287C9.41788 21.2287 8.57713 20.7767 8.11635 19.9709C7.43283 18.7742 7.84775 17.2499 9.04445 16.5664L14.2658 13.5812C15.4625 12.8977 16.9868 13.3126 17.6703 14.5093C18.3539 15.706 17.9389 17.2303 16.7422 17.9138L11.5208 20.899C11.1299 21.1217 10.7041 21.2287 10.2848 21.2287Z" fill="white"/></svg>'),
+			56, // Menu position
 		);
 
 		add_submenu_page(
@@ -274,7 +291,8 @@ class Lytics_Admin
 		add_filter('post_row_actions', function ($actions) {
 			global $post;
 
-			if ($post->post_type === 'widget') {
+			// Check if $post is an object and if its post_type property equals 'widget'
+			if (is_object($post) && $post->post_type === 'widget') {
 				unset($actions['inline hide-if-no-js']);
 			}
 
@@ -314,7 +332,7 @@ class Lytics_Admin
 		// Output the fields.
 		echo '<div>';
 		echo '<div>';
-		echo '<lytics-widgetwiz accountid="d54abf06a9ea7e2ab4ccd2dbaa55df2b" accesstoken="" pathforaconfig="' . $config_value . '" availableaudiences="W3sibGFiZWwiOiJBbGwiLCJ2YWx1ZSI6ImFsbCIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6IkFub255bW91cyBQcm9maWxlcyAtIDMwIGRheXMiLCJ2YWx1ZSI6ImFub255bW91c19wcm9maWxlc18zMF9kYXlzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJBbm9ueW1vdXMgUHJvZmlsZXMgLSA2MCBkYXlzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXNfNjBfZGF5cyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIC0gOTAgZGF5cyIsInZhbHVlIjoiYW5vbnltb3VzX3Byb2ZpbGVzXzkwX2RheXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Iktub3duIFByb2ZpbGVzIiwidmFsdWUiOiJrbm93bl9wcm9maWxlcyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiTHl0aWNzIEN1cnJlbnRseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfYWN0aXZlIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgRGlzZW5nYWdlZCIsInZhbHVlIjoic210X2Rvcm1hbnQiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBIaWdobHkgRW5nYWdlZCIsInZhbHVlIjoic210X3Bvd2VyIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgTmV3IiwidmFsdWUiOiJzbXRfbmV3IiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgUHJldmlvdXNseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfaW5hY3RpdmUiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBVbnNjb3JlZCIsInZhbHVlIjoic210X3Vuc2NvcmVkIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJVbmhlYWx0aHkgUHJvZmlsZXMiLCJ2YWx1ZSI6ImRlZmF1bHRfdW5oZWFsdGh5X3Byb2ZpbGVzIiwidHlwZSI6InN0cmluZyJ9XQ=="availablecollections="W3sibGFiZWwiOiJBbGwgRG9jdW1lbnRzIiwidmFsdWUiOiJhbGxfZG9jdW1lbnRzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJDb250ZW50IFdpdGggSW1hZ2VzIiwidmFsdWUiOiJjb250ZW50X3dpdGhfaW1hZ2VzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJEZWZhdWx0IFJlY29tbWVuZGF0aW9uIENvbGxlY3Rpb24iLCJ2YWx1ZSI6ImRlZmF1bHRfcmVjb21tZW5kYXRpb25zIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJFbmdsaXNoIENvbnRlbnQgV2l0aCBJbWFnZXMiLCJ2YWx1ZSI6ImVuZ2xpc2hfY29udGVudF93aXRoX2ltYWdlcyIsInR5cGUiOiJzdHJpbmcifV0=" titlefield="title" descriptionfield="lytics_widget_description" statusfield="lytics_widget_status" configurationfield="lytics_widget_configuration"></lytics-widgetwiz>';
+		echo '<lytics-widgetwiz accountid="dbe873e8d5a3fdfafa1ecb6e4ad49605" accesstoken="" pathforaconfig="' . $config_value . '" availableaudiences="W3sibGFiZWwiOiJBbGwiLCJ2YWx1ZSI6ImFsbCIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6IkFub255bW91cyBQcm9maWxlcyAtIDMwIGRheXMiLCJ2YWx1ZSI6ImFub255bW91c19wcm9maWxlc18zMF9kYXlzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJBbm9ueW1vdXMgUHJvZmlsZXMgLSA2MCBkYXlzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXNfNjBfZGF5cyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIC0gOTAgZGF5cyIsInZhbHVlIjoiYW5vbnltb3VzX3Byb2ZpbGVzXzkwX2RheXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Iktub3duIFByb2ZpbGVzIiwidmFsdWUiOiJrbm93bl9wcm9maWxlcyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiTHl0aWNzIEN1cnJlbnRseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfYWN0aXZlIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgRGlzZW5nYWdlZCIsInZhbHVlIjoic210X2Rvcm1hbnQiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBIaWdobHkgRW5nYWdlZCIsInZhbHVlIjoic210X3Bvd2VyIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgTmV3IiwidmFsdWUiOiJzbXRfbmV3IiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgUHJldmlvdXNseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfaW5hY3RpdmUiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBVbnNjb3JlZCIsInZhbHVlIjoic210X3Vuc2NvcmVkIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJVbmhlYWx0aHkgUHJvZmlsZXMiLCJ2YWx1ZSI6ImRlZmF1bHRfdW5oZWFsdGh5X3Byb2ZpbGVzIiwidHlwZSI6InN0cmluZyJ9XQ=="availablecollections="W3sibGFiZWwiOiJBbGwgRG9jdW1lbnRzIiwidmFsdWUiOiJhbGxfZG9jdW1lbnRzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJDb250ZW50IFdpdGggSW1hZ2VzIiwidmFsdWUiOiJjb250ZW50X3dpdGhfaW1hZ2VzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJEZWZhdWx0IFJlY29tbWVuZGF0aW9uIENvbGxlY3Rpb24iLCJ2YWx1ZSI6ImRlZmF1bHRfcmVjb21tZW5kYXRpb25zIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJFbmdsaXNoIENvbnRlbnQgV2l0aCBJbWFnZXMiLCJ2YWx1ZSI6ImVuZ2xpc2hfY29udGVudF93aXRoX2ltYWdlcyIsInR5cGUiOiJzdHJpbmcifV0=" titlefield="title" descriptionfield="lytics_widget_description" statusfield="lytics_widget_status" configurationfield="lytics_widget_configuration"></lytics-widgetwiz>';
 		echo '</div>';
 		echo '<textarea style="display:none;" id="lytics_widget_configuration" name="lytics_widget_configuration" rows="4" cols="50">' . esc_textarea($config_value) . '</textarea>';
 		echo '<input type="text" style="display:none;" id="lytics_widget_status" name="lytics_widget_status" value="' . esc_attr($status_value) . '" size="25" />';
@@ -365,20 +383,176 @@ class Lytics_Admin
 		}
 	}
 
+	public function getAudiences($table, $onlyPublic)
+	{
+		$apitoken = get_option('lytics_access_token');
+		if (empty($access_token)) {
+			// return one recort "oopsie"
+
+		}
+
+		$url = "https://api.lytics.io/v2/segment?table=" . $table . "&valid=true&kind=segment";
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			'Authorization: ' . $apitoken,
+		));
+
+		$response = curl_exec($ch);
+
+		if ($response === false) {
+			error_log("Error: " . curl_error($ch));
+			return [];
+		}
+
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if ($httpCode >= 400) {
+			error_log("Request failed with status: " . $response);
+			return [];
+		}
+
+		curl_close($ch);
+
+		$data = json_decode($response, true);
+
+		if ($data === null || !isset($data['data']) || !is_array($data['data'])) {
+			error_log("Unexpected response format");
+			return [];
+		}
+
+		$allSegments = $data['data'];
+		$publicSegments = array_filter($allSegments, function ($segment) {
+			return $segment['is_public'] === true;
+		});
+
+		$filteredSegments = [];
+		if ($onlyPublic) {
+			$filteredSegments = $publicSegments;
+		} else {
+			$filteredSegments = $allSegments;
+		}
+
+		$options = array_map(function ($segment) {
+			return array(
+				'label' => $segment['name'],
+				'value' => $segment['slug_name'],
+				'type' => 'string'
+			);
+		}, $filteredSegments);
+
+		usort($options, function ($a, $b) {
+			return strcmp($a['label'], $b['label']);
+		});
+
+		return $options;
+	}
+
+	public function getInterestEngines()
+	{
+		$apitoken = get_option('lytics_access_token');
+		if (empty($apitoken)) {
+			error_log("No access token found");
+			return [];
+		}
+
+		$url = "https://api.lytics.io/api/content/config";
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			'Authorization: ' . $apitoken,
+		));
+
+		$response = curl_exec($ch);
+
+		if ($response === false) {
+			error_log("Error: " . curl_error($ch));
+			return [];
+		}
+
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if ($httpCode >= 400) {
+			error_log("Request failed with status: " . $response);
+			return [];
+		}
+
+		curl_close($ch);
+
+		$data = json_decode($response, true);
+
+		if ($data === null || !isset($data['data']) || !is_array($data['data'])) {
+			error_log("Unexpected response format");
+			return [];
+		}
+
+		$allEngines = $data['data'];
+
+		$options = [];
+		foreach ($allEngines as $engine) {
+
+			$options[$engine['id']] = array(
+				'label' => $engine['label'],
+				'value' => $engine['id'],
+			);
+		}
+
+		usort($options, function ($a, $b) {
+			return strcmp($a['label'], $b['label']);
+		});
+
+		return $options;
+	}
+
 	public function register_lytics_recommendations_block()
 	{
+		// Get configuration settings
+		$account_id = get_option('lytics_account_id');
+		// error_log('Account ID: ' . $account_id);
+
+		// Get available interest engines
+		$engines = $this->getInterestEngines();
+		// error_log('Engines: ' . json_encode($engines));
+
+		// Get available content collections
+		$collections = $this->getAudiences('content', false);
+		// error_log('Collections: ' . json_encode($collections));
+
 		// Register the block editor script.
 		wp_register_script(
 			'lytics-recommendations-editor-script',
 			plugins_url('js/lytics-recommendations-block.js', __FILE__),
-			array('wp-blocks', 'wp-element', 'wp-editor'),
-			filemtime(plugin_dir_path(__FILE__) . 'js/lytics-recommendations-block.js')
+			array('wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor'),
+			filemtime(plugin_dir_path(__FILE__) . 'js/lytics-recommendations-block.js'),
+			true
 		);
+
+		// Localize the script with new data.
+		wp_localize_script(
+			'lytics-recommendations-editor-script',
+			'lyticsBlockData',
+			array(
+				'account_id' => $account_id,
+				'content_collections' => $collections,
+				'engines' => $engines,
+			)
+		);
+
+		add_filter('script_loader_tag', function ($tag, $handle) {
+			if ($handle === 'lytics-recommendations-editor-script') {
+				return str_replace('<script ', '<script type="module" ', $tag);
+			}
+			return $tag;
+		}, 10, 2);
 
 		// Register the block type.
 		register_block_type('lytics/recommendations', array(
 			'editor_script' => 'lytics-recommendations-editor-script',
 		));
+
+
+
+		wp_enqueue_style('lytics-recommendations-editor-style', plugins_url('../assets/lytics-recommendations-block.css', __FILE__));
 	}
 
 	public function hide_default_widget_editor()

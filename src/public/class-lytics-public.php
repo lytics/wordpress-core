@@ -72,14 +72,35 @@ class Lytics_Public
 	 */
 	public function enqueue_scripts()
 	{
-		wp_enqueue_script($this->plugin_name.'-public', plugin_dir_url(__FILE__) . 'js/lytics-public.js', array('jquery'), $this->version, false);
+		error_log(plugin_dir_url(__FILE__) . 'js/lytics-public.js');
+		wp_enqueue_script($this->plugin_name . '-public', plugin_dir_url(__FILE__) . 'js/lytics-public.js', array('jquery'), $this->version, false);
+
+		// Enqueue recommendation renderer
+		wp_enqueue_script(
+			$this->plugin_name . '-recommendation-renderer',
+			plugin_dir_url(__FILE__) . 'js/lytics-recommendation-render.js',
+			array('jquery'),
+			$this->version,
+			true
+		);
+
+		add_filter('script_loader_tag', function ($tag, $handle) {
+			if ($handle === $this->plugin_name . '-widget-wizard') {
+				return str_replace('<script ', '<script type="module" ', $tag);
+			}
+			if ($handle === $this->plugin_name . '-recommendation-renderer') {
+				return str_replace('<script ', '<script type="module" ', $tag);
+			}
+
+			return $tag;
+		}, 10, 2);
 	}
 
 	public function enqueue_tag_install()
 	{
 		$account_id = get_option('lytics_account_id');
 		$tag_enabled = get_option('lytics_enable_tag');
-    $custom_config = get_option('lytics_tag_config');
+		$custom_config = get_option('lytics_tag_config');
 		$debug_mode = get_option('lytics_debug_mode');
 
 		if (!$tag_enabled) {
@@ -100,13 +121,13 @@ class Lytics_Public
 		$custom_config['src'] = 'https://c.lytics.io/api/tag/' . $account_id . '/' . $js_file;
 
 		$config = array(
-				'config' => json_encode($custom_config)
+			'config' => json_encode($custom_config)
 		);
 
-		wp_enqueue_script($this->plugin_name.'-tag-install', plugin_dir_url(__FILE__) . 'js/lytics-tag-install.js', array(), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-tag-install', plugin_dir_url(__FILE__) . 'js/lytics-tag-install.js', array(), $this->version, false);
 
 
-		wp_localize_script($this->plugin_name.'-tag-install', 'lytics_tag_vars', $config);
+		wp_localize_script($this->plugin_name . '-tag-install', 'lytics_tag_vars', $config);
 	}
 
 	public function lytics_greeting_shortcode()
