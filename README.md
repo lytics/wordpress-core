@@ -1,5 +1,7 @@
-# Lytics for WordPress
-The official Lytics WordPress plugin seamlessly integrates the most powerful capabilities of the Lytics Personalization Engine directly into WordPress. Once activated, the plugin will automatically configure the Lytics collection and personalization tag on your website, allowing for the deployment of highly targeted web campaigns, personalized content, recommendations, and more.
+![image](https://github.com/lytics/wordpress-core/assets/2042008/eea842dc-c763-4878-b8b8-56140a6c54ce)
+
+## Overview
+The official Lytics for WordPress plugin. Used to seamlessly integrate the most powerful capabilities of the Lytics Personalization Engine directly into WordPress. Once activated, the plugin will automatically configure the Lytics collection and personalization tag on your website, allowing for the deployment of highly targeted web campaigns, personalized content, recommendations, and more.
 
 ## Features
 - **Installation:** Seamlessly connect your website with Lytics in a few clicks. No development required.
