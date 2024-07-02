@@ -30,8 +30,8 @@ export async function getRecommendation(
   //   baseURL = `https://api.lytics.io/api/content/recommend/${accountId}/segment/${options.segment}`;
   // }
 
-  console.log("options", options);
-  console.log("making recommendation");
+  // console.log("options", options);
+  // console.log("making recommendation");
 
   let parts = [];
   // add account id

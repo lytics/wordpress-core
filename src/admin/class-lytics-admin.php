@@ -314,6 +314,19 @@ class Lytics_Admin
 
 	public function lytics_widget_meta_box($post)
 	{
+
+		// Get stored settings
+		$account_id = get_option('lytics_account_id');
+		// error_log('Account ID: ' . $account_id);
+		$access_token = get_option('lytics_access_token');
+		// error_log('Token: ' . $access_token);
+		$engines = $this->getInterestEngines();
+		// error_log('Engines: ' . json_encode($engines));
+		$collections = $this->getAudiences('content', false);
+		// error_log('Collections: ' . json_encode($collections));
+		$segments = $this->getAudiences('user', true);
+		// error_log('Segments: ' . json_encode($segments));
+
 		// Add a nonce field so we can check for it later.
 		wp_nonce_field('lytics_widget_meta_box', 'lytics_widget_meta_box_nonce');
 
@@ -332,13 +345,13 @@ class Lytics_Admin
 		// Output the fields.
 		echo '<div>';
 		echo '<div>';
-		echo '<lytics-widgetwiz accountid="dbe873e8d5a3fdfafa1ecb6e4ad49605" accesstoken="" pathforaconfig="' . $config_value . '" availableaudiences="W3sibGFiZWwiOiJBbGwiLCJ2YWx1ZSI6ImFsbCIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6IkFub255bW91cyBQcm9maWxlcyAtIDMwIGRheXMiLCJ2YWx1ZSI6ImFub255bW91c19wcm9maWxlc18zMF9kYXlzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJBbm9ueW1vdXMgUHJvZmlsZXMgLSA2MCBkYXlzIiwidmFsdWUiOiJhbm9ueW1vdXNfcHJvZmlsZXNfNjBfZGF5cyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiQW5vbnltb3VzIFByb2ZpbGVzIC0gOTAgZGF5cyIsInZhbHVlIjoiYW5vbnltb3VzX3Byb2ZpbGVzXzkwX2RheXMiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Iktub3duIFByb2ZpbGVzIiwidmFsdWUiOiJrbm93bl9wcm9maWxlcyIsInR5cGUiOiJzdHJpbmcifSx7ImxhYmVsIjoiTHl0aWNzIEN1cnJlbnRseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfYWN0aXZlIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgRGlzZW5nYWdlZCIsInZhbHVlIjoic210X2Rvcm1hbnQiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBIaWdobHkgRW5nYWdlZCIsInZhbHVlIjoic210X3Bvd2VyIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgTmV3IiwidmFsdWUiOiJzbXRfbmV3IiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJMeXRpY3MgUHJldmlvdXNseSBFbmdhZ2VkIiwidmFsdWUiOiJzbXRfaW5hY3RpdmUiLCJ0eXBlIjoic3RyaW5nIn0seyJsYWJlbCI6Ikx5dGljcyBVbnNjb3JlZCIsInZhbHVlIjoic210X3Vuc2NvcmVkIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJVbmhlYWx0aHkgUHJvZmlsZXMiLCJ2YWx1ZSI6ImRlZmF1bHRfdW5oZWFsdGh5X3Byb2ZpbGVzIiwidHlwZSI6InN0cmluZyJ9XQ=="availablecollections="W3sibGFiZWwiOiJBbGwgRG9jdW1lbnRzIiwidmFsdWUiOiJhbGxfZG9jdW1lbnRzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJDb250ZW50IFdpdGggSW1hZ2VzIiwidmFsdWUiOiJjb250ZW50X3dpdGhfaW1hZ2VzIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJEZWZhdWx0IFJlY29tbWVuZGF0aW9uIENvbGxlY3Rpb24iLCJ2YWx1ZSI6ImRlZmF1bHRfcmVjb21tZW5kYXRpb25zIiwidHlwZSI6InN0cmluZyJ9LHsibGFiZWwiOiJFbmdsaXNoIENvbnRlbnQgV2l0aCBJbWFnZXMiLCJ2YWx1ZSI6ImVuZ2xpc2hfY29udGVudF93aXRoX2ltYWdlcyIsInR5cGUiOiJzdHJpbmcifV0=" titlefield="title" descriptionfield="lytics_widget_description" statusfield="lytics_widget_status" configurationfield="lytics_widget_configuration"></lytics-widgetwiz>';
+		echo '<lytics-widgetwiz accountid="' . $account_id . '" accesstoken="' . $access_token . '" pathforaconfig="' . $config_value . '" availableaudiences="' . base64_encode(json_encode($segments)) . '"availablecollections="' . base64_encode(json_encode($collections)) . '" titlefield="title" descriptionfield="lytics_widget_description" statusfield="lytics_widget_status" configurationfield="lytics_widget_configuration"></lytics-widgetwiz>';
 		echo '</div>';
 		echo '<textarea style="display:none;" id="lytics_widget_configuration" name="lytics_widget_configuration" rows="4" cols="50">' . esc_textarea($config_value) . '</textarea>';
 		echo '<input type="text" style="display:none;" id="lytics_widget_status" name="lytics_widget_status" value="' . esc_attr($status_value) . '" size="25" />';
 		echo '<textarea id="lytics_widget_description" style="display:none;" name="lytics_widget_description" rows="4" cols="50">' . esc_textarea($description_value) . '</textarea>';
 		echo '</div>';
-		echo '<script>document.querySelector(\'#titlediv\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
+		echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
 	}
 
 	public function save_widget_meta_box_data($post_id)

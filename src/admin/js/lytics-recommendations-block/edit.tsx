@@ -7,7 +7,6 @@ const editor = window.wp.blockEditor;
 const components = window.wp.components;
 
 const renderBlockContent = (attributes: any): React.JSX.Element => {
-  console.log(attributes);
   let payload = {
     account_id: attributes.accountId,
     element: `rec-container-${attributes.blockId}`,
@@ -25,10 +24,6 @@ const renderBlockContent = (attributes: any): React.JSX.Element => {
     show_body: attributes.showBody ? 1 : 0,
     preview_uid: attributes.previewUID,
   };
-
-  //   {
-  //     "className": "rec-wrapper"
-  // }
 
   const encodedPayload = btoa(JSON.stringify(payload));
 

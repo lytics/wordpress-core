@@ -130,6 +130,11 @@ class Lytics_Public
 		wp_localize_script($this->plugin_name . '-tag-install', 'lytics_tag_vars', $config);
 	}
 
+	public function enqueue_published_widgets()
+	{
+		include plugin_dir_path(__FILE__) . 'partials/lytics-public-display.php';
+	}
+
 	public function lytics_greeting_shortcode()
 	{
 		return 'Hello, World!';

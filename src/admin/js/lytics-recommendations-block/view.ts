@@ -55,10 +55,8 @@ class LyticsRender {
 
       let recs = [];
       if (options.previewUID) {
-        console.log("Getting recommendations");
         recs = await getRecommendation(options);
       } else {
-        console.log("Using placeholder");
         recs = Array.from(
           { length: recommendationConfig.number_of_recommendations },
           () => this.placeholder
