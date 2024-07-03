@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div>
               <label for="edit-ignore-admin-users">Ignore Admin Users</label>
               <p class="mb-0" style="font-size: 12px;">When activated Lytics will not be installed for users who are
-                actively logged in to Drupal. This may prevent testing of personalization and recommendation features
+                actively logged in to WordPress. This may prevent testing of personalization and recommendation features
                 but also may prevent skewing of analytics data.
               </p>
             </div>

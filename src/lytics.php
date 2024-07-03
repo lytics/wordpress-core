@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Lytics
  * Plugin URI:        https://https://wordpress.com/plugins/lytics
- * Description:       The Lytics WordPress Plugin seamlessly integrates your website with the Lytics Customer Data Platform (CDP). This integration empowers site administrators to leverage extensive visitor data and personalization capabilities, enhancing user experiences and building a robust first-party data asset within their Drupal site.
+ * Description:       The Lytics WordPress Plugin seamlessly integrates your website with the Lytics Customer Data Platform (CDP). This integration empowers site administrators to leverage extensive visitor data and personalization capabilities, enhancing user experiences and building a robust first-party data asset within their WordPress site.
  * Version:           1.0.0
  * Author:            Lytics
  * Author URI:        https://lytics.com/
