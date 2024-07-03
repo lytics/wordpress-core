@@ -243,7 +243,7 @@ function lytics_settings_page()
             <input type="checkbox" id="edit-ignore-admin-users" style="width: 1rem; height: 1rem;" class="me-3" name="ignore_admin_users" <?php echo ($lytics_ignore_admin_users == 1) ? 'checked' : ''; ?>>
             <div>
               <label for="edit-ignore-admin-users">Ignore Admin Users</label>
-              <p class="mb-0" style="font-size: 12px;">When activated Lytics will not be installed for users who are actively logged in to Drupal. This may prevent testing of personalization and recommendation features but also may prevent skewing of analytics data.
+              <p class="mb-0" style="font-size: 12px;">When activated Lytics will not be installed for users who are actively logged in to WordPress. This may prevent testing of personalization and recommendation features but also may prevent skewing of analytics data.
               </p>
             </div>
           </div>
