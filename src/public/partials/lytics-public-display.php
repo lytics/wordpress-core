@@ -11,8 +11,6 @@
  * @package    Lytics
  * @subpackage Lytics/public/partials
  */
-?>
-<?php
 
 $account_id = get_option('lytics_account_id');
 $tag_enabled = get_option('lytics_enable_tag');

@@ -79,6 +79,10 @@ export default defineConfig({
           src: "./src/backup",
           dest: ".",
         },
+        {
+          src: "./README.md",
+          dest: ".",
+        },
       ],
     }),
   ],

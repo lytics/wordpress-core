@@ -26,12 +26,6 @@ export async function getRecommendation(
   options: RecommendationOptions
 ): Promise<Recommendation[]> {
   let baseURL = `https://api.lytics.io/api/content/recommend/${options.accountId}/user/_uid/${options.previewUID}`;
-  // if (options.segment !== "") {
-  //   baseURL = `https://api.lytics.io/api/content/recommend/${accountId}/segment/${options.segment}`;
-  // }
-
-  // console.log("options", options);
-  // console.log("making recommendation");
 
   let parts = [];
   // add account id

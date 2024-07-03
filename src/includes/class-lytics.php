@@ -123,7 +123,6 @@ class Lytics
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
-		// $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_tag_install');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_published_widgets');
 		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'lytics_greeting_shortcode');
 	}

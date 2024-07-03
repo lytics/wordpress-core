@@ -1,1 +1,1 @@
-// console.log("hello world temp");
+// Global admin JS goes here.
