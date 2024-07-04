@@ -26,7 +26,7 @@ The official Lytics for WordPress plugin. Used to seamlessly integrate the most 
 2. **Enable Plugin**: Access the Lytics plugin settings via the WordPress admin panel. Enter your Lytics Access Token as instructed and click save. Be sure to `enable tag` to ensure Lytics is configured properly.
 
 # Contributing to Lytics for WordPress
-As an open source project, we rely on community contributions to continue to improve WooCommerce. To contribute, please follow the pre-requisites above and visit our Contributing to Woo doc for more links and contribution guidelines.
+As an open source project, we rely on community contributions to continue to improve Lytics WordPress plugin. To contribute, please follow the pre-requisites above and visit our Contributing to Woo doc for more links and contribution guidelines.
 
 ## Local Development
 The following steps act as a general guid for building and running the Lytics WordPress plugin for local development:
