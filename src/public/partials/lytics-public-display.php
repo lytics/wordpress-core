@@ -60,7 +60,7 @@ function convertJsonToJs($config)
                 }' . "\n";
         }
       } else {
-        $output .= $variable . '.' . $key . ' = ' . json_encode($value) . ';' . "\n";
+        $output .= $variable . '.' . $key . ' = ' . wp_json_encode($value) . ';' . "\n";
       }
     }
   }
@@ -92,7 +92,7 @@ echo '
     // Define config and initialize Lytics tracking tag.
     // - The setup below will disable the automatic sending of Page Analysis Information (to prevent duplicative sends, as this same information will be included in the jstag.pageView() call below, by default)
     jstag.init({
-      src: "https://c.lytics.io/api/tag/' . $account_id . '/latest.min.js",
+      src: "https://c.lytics.io/api/tag/' . esc_html($account_id) . '/latest.min.js",
     });
 
     // You may need to send a page view, depending on your use-case
@@ -102,7 +102,7 @@ echo '
     var __ly_evaluate_widgets = function(entity){
       var segmentMembership = entity?.data?.user?.segments || []; 
       
-      ' . $outputJS . '
+      ' . esc_html($outputJS) . '
       
       __ly_render_widgets = [];
       __ly_modules.forEach(function(module){

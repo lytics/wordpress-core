@@ -6,10 +6,12 @@
 ?>
 
 <?php
-// get query param value for error if it exist
-$error = isset($_GET['error']) ? $_GET['error'] : '';
-if ($error) {
-  add_settings_error('lytics_core', 'lytics_access_token', $error, 'error');
+if (isset($_GET['error']) && isset($_GET['lytics_settings_save_nonce'])) {
+  if (!wp_verify_nonce($_GET['lytics_settings_save_nonce'], 'lytics_settings_save_nonce')) {
+    wp_die('Security check failed');
+  } else {
+    add_settings_error('lytics_core', 'lytics_access_token', $error, 'error');
+  }
 }
 settings_errors('lytics_core');
 
@@ -79,12 +81,13 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
 
   <?php if ($promo_message !== "") : ?>
     <div class="promo-banner">
-      <?php echo $promo_message; ?>
+      <?php echo wp_kses_post($promo_message); ?>
     </div>
   <?php endif; ?>
 
   <div class="container-fluid p-3 m-0">
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+      <?php wp_nonce_field('lytics_config_form_action', 'lytics_config_form_nonce'); ?>
       <?php settings_fields('lytics_core'); ?>
 
       <input type="hidden" name="action" value="lytics_process_form">
@@ -92,7 +95,7 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
       <!-- Credentials -->
       <div class="container-fluid mt-4 border rounded shadow-sm p-0">
         <div class="container-fluid pt-2 pb-2 mb-2 d-flex section-head">
-          <img class="me-2" src="<?php echo plugin_dir_url(dirname(__FILE__)) . '/img/key-icon.svg'; ?>" alt="Icon of a key.">
+          <img class="me-2" src="<?php echo esc_attr(plugin_dir_url(dirname(__FILE__))) . '/img/key-icon.svg'; ?>" alt="Icon of a key.">
           <h5>Credentials</h5>
         </div>
 
@@ -108,23 +111,23 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
       </div>
 
       <!-- Account Details -->
-      <div class="container-fluid mt-4 border rounded shadow-sm p-0<?= $hasValidToken ? '' : ' d-none' ?>">
+      <div class="container-fluid mt-4 border rounded shadow-sm p-0<?php echo $hasValidToken ? '' : ' d-none' ?>">
         <div class="container-fluid pt-2 pb-2 mb-2 d-flex section-head">
-          <img class="me-2" src="<?php echo plugin_dir_url(dirname(__FILE__)) . '/img/profile-icon.svg'; ?>" alt="Icon of a user outline and some lines representing details.">
+          <img class="me-2" src="<?php echo esc_attr(plugin_dir_url(dirname(__FILE__))) . '/img/profile-icon.svg'; ?>" alt="Icon of a user outline and some lines representing details.">
           <h5>Account Details</h5>
         </div>
         <div class="container-fluid">
           <div class="mb-3">
             <label for="account_name" class="form-label">Account Name</label>
-            <input type="text" class="form-control" id="account_name" disabled name="account_name" value="<?php echo $lytics_account_name; ?>">
+            <input type="text" class="form-control" id="account_name" disabled name="account_name" value="<?php echo esc_attr($lytics_account_name); ?>">
           </div>
           <div class="mb-3">
             <label for="account_id" class="form-label">Account ID</label>
-            <input type="text" class="form-control" id="account_id" disabled name="account_id" value="<?php echo $lytics_account_id; ?>">
+            <input type="text" class="form-control" id="account_id" disabled name="account_id" value="<?php echo esc_attr($lytics_account_id); ?>">
           </div>
           <div class="mb-3">
             <label for="aid" class="form-label">Account AID</label>
-            <input type="text" class="form-control" id="aid" disabled name="aid" value="<?php echo $lytics_aid; ?>">
+            <input type="text" class="form-control" id="aid" disabled name="aid" value="<?php echo esc_attr($lytics_aid); ?>">
           </div>
           <div class="mb-3">
             <label for="domain" class="form-label">Domain</label>
@@ -134,9 +137,9 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
       </div>
 
       <!-- Configuration -->
-      <div class="container-fluid mt-4 border rounded shadow-sm p-0<?= $hasValidToken ? '' : ' d-none' ?>">
+      <div class="container-fluid mt-4 border rounded shadow-sm p-0<?php echo $hasValidToken ? '' : ' d-none' ?>">
         <div class="container-fluid pt-2 pb-2 mb-2 d-flex section-head">
-          <img class="me-2" src="<?php echo plugin_dir_url(dirname(__FILE__)) . '/img/config-icon.svg'; ?>" alt="Icon of a code bracket for configuration.">
+          <img class="me-2" src="<?php echo esc_attr(plugin_dir_url(dirname(__FILE__))) . '/img/config-icon.svg'; ?>" alt="Icon of a code bracket for configuration.">
           <h5 class="p-0 m-0">Configuration</h5>
         </div>
         <div class="container-fluid">
@@ -167,7 +170,7 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
           </div>
           <div class="mb-3 form-group">
             <label for="jsonInput">Additional Tag Configuration</label>
-            <textarea id="jsonInput" class="form-control" rows="5" name="tag_config"><?php echo stripslashes($lytics_tag_config); ?></textarea>
+            <textarea id="jsonInput" class="form-control" rows="5" name="tag_config"><?php echo esc_attr(stripslashes($lytics_tag_config)); ?></textarea>
           </div>
         </div>
       </div>
