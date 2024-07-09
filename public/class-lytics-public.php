@@ -72,7 +72,6 @@ class Lytics_Public
 	 */
 	public function enqueue_scripts()
 	{
-		error_log(plugin_dir_url(__FILE__) . 'js/lytics-public.js');
 		wp_enqueue_script($this->plugin_name . '-public', plugin_dir_url(__FILE__) . 'js/lytics-public.js', array('jquery'), $this->version, false);
 
 		wp_enqueue_script(
