@@ -12,8 +12,8 @@
  * @subpackage lyticswp/public/partials
  */
 
-$account_id = get_option('lytics_account_id');
-$tag_enabled = get_option('lytics_enable_tag');
+$account_id = get_option('lyticswp_account_id');
+$tag_enabled = get_option('lyticswp_enable_tag');
 
 if (!$account_id || !$tag_enabled) {
   return;
@@ -78,7 +78,7 @@ if ($query->have_posts()) {
 
   while ($query->have_posts()) {
     $query->the_post();
-    $widget = get_post_meta(get_the_ID(), '_lytics_widget_configuration', true);
+    $widget = get_post_meta(get_the_ID(), '_lyticswp_widget_configuration', true);
     $js = lyticswpConvertJsonToJs($widget);
     $outputJS .= $js;
   }

@@ -138,27 +138,27 @@ class Lyticswp_Admin
 			'Lytics', // Page title
 			'Lytics', // Menu title
 			'manage_options', // Capability required to access menu item
-			'lytics_settings', // Menu slug
+			'lyticswp_settings', // Menu slug
 			null, // Callback function to render the page content
 			'data:image/svg+xml;base64,' . base64_encode('<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.99186 9.28415C5.12491 9.28415 4.28416 8.83211 3.82338 8.0263C3.13986 6.8296 3.55478 5.30533 4.75148 4.62181L9.97505 1.63442C11.1718 0.950898 12.696 1.36581 13.3795 2.56252C14.0631 3.75922 13.6482 5.28349 12.4514 5.96919L7.23006 8.9544C6.83916 9.17715 6.41333 9.28415 5.99186 9.28415Z" fill="white"/><path d="M5.99186 16.4231C5.12491 16.4231 4.28416 15.971 3.82338 15.1652C3.13986 13.9685 3.55478 12.4443 4.75148 11.7607L9.97287 8.77553C11.1696 8.09201 12.6938 8.50693 13.3774 9.70363C14.0631 10.8982 13.6481 12.4246 12.4514 13.1081L7.23006 16.0933C6.83916 16.3183 6.41333 16.4231 5.99186 16.4231Z" fill="white"/><path d="M10.2848 21.2287C9.41788 21.2287 8.57713 20.7767 8.11635 19.9709C7.43283 18.7742 7.84775 17.2499 9.04445 16.5664L14.2658 13.5812C15.4625 12.8977 16.9868 13.3126 17.6703 14.5093C18.3539 15.706 17.9389 17.2303 16.7422 17.9138L11.5208 20.899C11.1299 21.1217 10.7041 21.2287 10.2848 21.2287Z" fill="white"/></svg>'),
 			56, // Menu position
 		);
 
 		add_submenu_page(
-			'lytics_settings', // Parent slug
+			'lyticswp_settings', // Parent slug
 			'Settings', // Page title
 			'Settings', // Menu title
 			'manage_options', // Capability required to access menu item
-			'lytics_settings', // Menu slug
+			'lyticswp_settings', // Menu slug
 			array($this, 'lyticswp_settings_page') // Callback function to render the page content
 		);
 
 		add_submenu_page(
-			'lytics_settings', // Parent slug
+			'lyticswp_settings', // Parent slug
 			'Widgets', // Page title
 			'Widgets', // Menu title
 			'manage_options', // Capability required to access menu item
-			'edit.php?post_type=widget' // Menu slug
+			'edit.php?post_type=lyticswp_widget' // Menu slug
 		);
 	}
 
@@ -181,17 +181,17 @@ class Lyticswp_Admin
 		}
 
 		// Verify the nonce
-		if (!isset($_POST['lytics_config_form_nonce']) || !check_admin_referer('lytics_config_form_action', 'lytics_config_form_nonce')) {
+		if (!isset($_POST['lyticswp_config_form_nonce']) || !check_admin_referer('lyticswp_config_form_action', 'lyticswp_config_form_nonce')) {
 			wp_die('Nonce verification failed');
 		}
 
 		// If that we have an access token
 		if (empty($_POST['access_token'])) {
-			$nonce = wp_create_nonce('lytics_settings_save_nonce');
+			$nonce = wp_create_nonce('lyticswp_settings_save_nonce');
 			wp_redirect(add_query_arg(array(
 				'error' => 'Access Token is required.',
-				'lytics_settings_save_nonce' => $nonce
-			), admin_url('admin.php?page=lytics_settings')));
+				'lyticswp_settings_save_nonce' => $nonce
+			), admin_url('admin.php?page=lyticswp_settings')));
 			exit;
 		}
 
@@ -203,29 +203,29 @@ class Lyticswp_Admin
 		$tag_config = sanitize_text_field($_POST['tag_config']);
 
 		// Validate that access token is valid
-		$accountDetails = $this->fetchAccountDetails($access_token);
+		$accountDetails = $this->get_lytics_account_details($access_token);
 		if (!$accountDetails) {
-			wp_redirect(add_query_arg('error', 'Invalid Access Token.', admin_url('admin.php?page=lytics_settings')));
+			wp_redirect(add_query_arg('error', 'Invalid Access Token.', admin_url('admin.php?page=lyticswp_settings')));
 			exit;
 		}
 
 		// Update settings
-		update_option('lytics_access_token', $access_token);
-		update_option('lytics_account_name', $accountDetails['name']);
-		update_option('lytics_account_id', $accountDetails['id']);
-		update_option('lytics_aid', $accountDetails['aid']);
-		update_option('lytics_domain', $accountDetails['domain']);
-		update_option('lytics_enable_tag', $enable_tag);
-		update_option('lytics_debug_mode', $debug_mode);
-		update_option('lytics_ignore_admin_users', $ignore_admin_users);
-		update_option('lytics_tag_config', $tag_config);
+		update_option('lyticswp_access_token', $access_token);
+		update_option('lyticswp_account_name', $accountDetails['name']);
+		update_option('lyticswp_account_id', $accountDetails['id']);
+		update_option('lyticswp_aid', $accountDetails['aid']);
+		update_option('lyticswp_domain', $accountDetails['domain']);
+		update_option('lyticswp_enable_tag', $enable_tag);
+		update_option('lyticswp_debug_mode', $debug_mode);
+		update_option('lyticswp_ignore_admin_users', $ignore_admin_users);
+		update_option('lyticswp_tag_config', $tag_config);
 
 		// Redirect back to the settings page
-		wp_redirect(admin_url('admin.php?page=lytics_settings'));
+		wp_redirect(admin_url('admin.php?page=lyticswp_settings'));
 		exit;
 	}
 
-	private function fetchAccountDetails($token)
+	private function get_lytics_account_details($token)
 	{
 		if (empty($token)) {
 			return FALSE;
@@ -267,14 +267,14 @@ class Lyticswp_Admin
 		return FALSE;
 	}
 
-	public function register_lytics_widget_post_type()
+	public function register_lyticswp_widget_post_type()
 	{
 		$labels = array(
 			'name'               => _x('Widgets', 'post type general name', 'lytics-wp'),
 			'singular_name'      => _x('Widget', 'post type singular name', 'lytics-wp'),
 			'menu_name'          => _x('Widgets', 'admin menu', 'lytics-wp'),
 			'name_admin_bar'     => _x('Widget', 'add new on admin bar', 'lytics-wp'),
-			'add_new'            => _x('Add New', 'widget', 'lytics-wp'),
+			'add_new'            => _x('Add New', 'lyticswp_widget', 'lytics-wp'),
 			'add_new_item'       => __('Add New Widget', 'lytics-wp'),
 			'new_item'           => __('New Widget', 'lytics-wp'),
 			'edit_item'          => __('Edit Widget', 'lytics-wp'),
@@ -293,7 +293,7 @@ class Lyticswp_Admin
 			'show_ui'            => true,
 			'show_in_menu'       => false,
 			'query_var'          => true,
-			'rewrite'            => array('slug' => 'widget'),
+			'rewrite'            => array('slug' => 'lyticswp_widget'),
 			'capability_type'    => 'post',
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -302,14 +302,14 @@ class Lyticswp_Admin
 		);
 
 		// Register custom post type
-		register_post_type('widget', $args);
+		register_post_type('lyticswp_widget', $args);
 
 		// Remove Quick Edit link for the custom post type
 		add_filter('post_row_actions', function ($actions) {
 			global $post;
 
-			// Check if $post is an object and if its post_type property equals 'widget'
-			if (is_object($post) && $post->post_type === 'widget') {
+			// Check if $post is an object and if its post_type property equals 'lyticswp_widget'
+			if (is_object($post) && $post->post_type === 'lyticswp_widget') {
 				unset($actions['inline hide-if-no-js']);
 			}
 
@@ -317,25 +317,25 @@ class Lyticswp_Admin
 		}, 10, 1);
 	}
 
-	public function add_lytics_widget_meta_box()
+	public function add_lyticswp_widget_meta_box()
 	{
 		add_meta_box(
-			'lytics_widget_meta',
+			'lyticswp_widget_meta',
 			'Configuration',
-			array($this, 'lytics_widget_meta_box'),
-			'widget',
+			array($this, 'lyticswp_widget_meta_box'),
+			'lyticswp_widget',
 			'normal',
 			'high'
 		);
 	}
 
-	public function lytics_widget_meta_box($post)
+	public function lyticswp_widget_meta_box($post)
 	{
 
 		// Get stored settings
-		$account_id = get_option('lytics_account_id');
+		$account_id = get_option('lyticswp_account_id');
 		// error_log('Account ID: ' . $account_id);
-		$access_token = get_option('lytics_access_token');
+		$access_token = get_option('lyticswp_access_token');
 		// error_log('Token: ' . $access_token);
 		$engines = $this->get_lytics_interest_engines();
 		// error_log('Engines: ' . wp_json_encode($engines));
@@ -344,10 +344,10 @@ class Lyticswp_Admin
 		$segments = $this->get_lytics_audiences('user', true);
 		// error_log('Segments: ' . wp_json_encode($segments));
 
-		wp_nonce_field('lytics_widget_meta_box', 'lytics_widget_meta_box_nonce');
+		wp_nonce_field('lyticswp_widget_meta_box', 'lyticswp_widget_meta_box_nonce');
 
 		// Retrieve existing values from the database.
-		$config_value = get_post_meta($post->ID, '_lytics_widget_configuration', true);
+		$config_value = get_post_meta($post->ID, '_lyticswp_widget_configuration', true);
 		$status_value = get_post_meta($post->ID, '_lytics_widget_status', true);
 		$description_value = get_post_meta($post->ID, '_lytics_widget_description', true);
 
@@ -370,10 +370,10 @@ class Lyticswp_Admin
 		echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
 	}
 
-	public function save_lytics_widget_meta_box_data($post_id)
+	public function save_lyticswp_widget_meta_box_data($post_id)
 	{
 
-		if (! isset($_POST['lytics_widget_meta_box_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lytics_widget_meta_box_nonce'])), 'lytics_widget_meta_box')) {
+		if (! isset($_POST['lyticswp_widget_meta_box_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lyticswp_widget_meta_box_nonce'])), 'lyticswp_widget_meta_box')) {
 			return $post_id;
 		}
 
@@ -398,7 +398,7 @@ class Lyticswp_Admin
 
 		if (isset($_POST['lytics_widget_configuration'])) {
 			$new_config_value = sanitize_text_field($_POST['lytics_widget_configuration']);
-			update_post_meta($post_id, '_lytics_widget_configuration', $new_config_value);
+			update_post_meta($post_id, '_lyticswp_widget_configuration', $new_config_value);
 		}
 
 		if (isset($_POST['lytics_widget_status'])) {
@@ -409,7 +409,7 @@ class Lyticswp_Admin
 
 	public function get_lytics_audiences($table, $onlyPublic)
 	{
-		$apitoken = get_option('lytics_access_token');
+		$apitoken = get_option('lyticswp_access_token');
 		if (empty($apitoken)) {
 			return [
 				[
@@ -477,7 +477,7 @@ class Lyticswp_Admin
 
 	public function get_lytics_interest_engines()
 	{
-		$apitoken = get_option('lytics_access_token');
+		$apitoken = get_option('lyticswp_access_token');
 		if (empty($apitoken)) {
 			error_log("No access token found");
 			return [];
@@ -527,10 +527,10 @@ class Lyticswp_Admin
 	}
 
 
-	public function register_lytics_recommendation_block()
+	public function register_lyticswp_recommendation_block()
 	{
 		// Get configuration settings
-		$account_id = get_option('lytics_account_id');
+		$account_id = get_option('lyticswp_account_id');
 		// error_log('Account ID: ' . $account_id);
 
 		// Get available interest engines
@@ -576,9 +576,9 @@ class Lyticswp_Admin
 		wp_enqueue_style('lytics-recommendations-editor-style', plugins_url('../assets/lytics-recommendations-block.css', __FILE__), array(), '1.0.0');
 	}
 
-	public function hide_default_lytics_widget_editor()
+	public function hide_default_lyticswp_widget_editor()
 	{
-		$target_post_type = 'widget';
+		$target_post_type = 'lyticswp_widget';
 
 		if (!isset($_POST['lytics_ignore_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['lytics_ignore_nonce']), 'lytics_ignore_nonce')) {
 			return; // Exit early if nonce verification fails
@@ -606,15 +606,15 @@ class Lyticswp_Admin
 
 	public function register_lyticswp_settings()
 	{
-		register_setting('lytics_settings_group', 'lytics_access_token');
-		register_setting('lytics_settings_group', 'lytics_enable_tag');
-		register_setting('lytics_settings_group', 'lytics_debug_mode');
-		register_setting('lytics_settings_group', 'lytics_ignore_admin_users');
-		register_setting('lytics_settings_group', 'lytics_tag_config');
-		register_setting('lytics_settings_group', 'lytics_account_name');
-		register_setting('lytics_settings_group', 'lytics_account_id');
-		register_setting('lytics_settings_group', 'lytics_aid');
-		register_setting('lytics_settings_group', 'lytics_domain');
+		register_setting('lyticswp_settings_group', 'lyticswp_access_token');
+		register_setting('lyticswp_settings_group', 'lyticswp_enable_tag');
+		register_setting('lyticswp_settings_group', 'lyticswp_debug_mode');
+		register_setting('lyticswp_settings_group', 'lyticswp_ignore_admin_users');
+		register_setting('lyticswp_settings_group', 'lyticswp_tag_config');
+		register_setting('lyticswp_settings_group', 'lyticswp_account_name');
+		register_setting('lyticswp_settings_group', 'lyticswp_account_id');
+		register_setting('lyticswp_settings_group', 'lyticswp_aid');
+		register_setting('lyticswp_settings_group', 'lyticswp_domain');
 	}
 
 	public function reset_lyticswp_settings()
@@ -632,17 +632,17 @@ class Lyticswp_Admin
 		}
 
 		// Delete all options related to your plugin
-		delete_option('lytics_access_token');
-		delete_option('lytics_account_name');
-		delete_option('lytics_account_id');
-		delete_option('lytics_aid');
-		delete_option('lytics_domain');
-		delete_option('lytics_enable_tag');
-		delete_option('lytics_debug_mode');
-		delete_option('lytics_ignore_admin_users');
-		delete_option('lytics_tag_config');
+		delete_option('lyticswp_access_token');
+		delete_option('lyticswp_account_name');
+		delete_option('lyticswp_account_id');
+		delete_option('lyticswp_aid');
+		delete_option('lyticswp_domain');
+		delete_option('lyticswp_enable_tag');
+		delete_option('lyticswp_debug_mode');
+		delete_option('lyticswp_ignore_admin_users');
+		delete_option('lyticswp_tag_config');
 
-		wp_redirect(admin_url('admin.php?page=lytics_settings'));
+		wp_redirect(admin_url('admin.php?page=lyticswp_settings'));
 		exit;
 	}
 }

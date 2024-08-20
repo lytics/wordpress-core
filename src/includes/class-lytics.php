@@ -98,19 +98,19 @@ class Lyticswp
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_main_menu');
-		$this->loader->add_filter('plugin_action_links_lytics/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lyticswp_settings_link');
-		$this->loader->add_action('admin_post_lytics_process_form', $plugin_admin, 'lyticswp_settings_handle_form_submission');
+		$this->loader->add_filter('plugin_action_links_lyticswp/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lyticswp_settings_link');
+		$this->loader->add_action('admin_post_lyticswp_process_form', $plugin_admin, 'lyticswp_settings_handle_form_submission');
 		$this->loader->add_action('admin_init', $plugin_admin, 'register_lyticswp_settings');
 		$this->loader->add_action('admin_post_delete_lyticswp_settings', $plugin_admin, 'delete_lyticswp_settings');
 
 		// Widget
-		$this->loader->add_action('init', $plugin_admin, 'register_lytics_widget_post_type');
-		$this->loader->add_action('init', $plugin_admin, 'hide_default_lytics_widget_editor');
-		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_lytics_widget_meta_box');
-		$this->loader->add_action('save_post', $plugin_admin, 'save_lytics_widget_meta_box_data');
+		$this->loader->add_action('init', $plugin_admin, 'register_lyticswp_widget_post_type');
+		$this->loader->add_action('init', $plugin_admin, 'hide_default_lyticswp_widget_editor');
+		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_lyticswp_widget_meta_box');
+		$this->loader->add_action('save_post', $plugin_admin, 'save_lyticswp_widget_meta_box_data');
 
 		// Gutenberg
-		$this->loader->add_action('init', $plugin_admin, 'register_lytics_recommendation_block');
+		$this->loader->add_action('init', $plugin_admin, 'register_lyticswp_recommendation_block');
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Lyticswp
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_published_widgets');
-		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'render_greeting_shortcode');
+		$this->loader->add_shortcode('lyticswp_greeting', $plugin_public, 'render_greeting_shortcode');
 	}
 
 	/**
