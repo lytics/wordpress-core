@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     watch: {
-      include: ["src/**"],
+      include: ["src/**/*"],
       exclude: ["node_modules", "dist", ".git"],
     },
   },

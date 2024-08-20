@@ -7,7 +7,7 @@
  * public-facing site hooks.
  */
 
-class Lytics
+class Lyticswp
 {
 
 	/**
@@ -31,12 +31,12 @@ class Lytics
 	 */
 	public function __construct()
 	{
-		if (defined('LYTICS_VERSION')) {
-			$this->version = LYTICS_VERSION;
+		if (defined('LYTICSWP_VERSION')) {
+			$this->version = LYTICSWP_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'lytics';
+		$this->plugin_name = 'lyticswp';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -93,7 +93,7 @@ class Lytics
 	private function define_admin_hooks()
 	{
 
-		$plugin_admin = new Lytics_Admin($this->get_plugin_name(), $this->get_version());
+		$plugin_admin = new Lytics_WP_Admin($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -119,12 +119,12 @@ class Lytics
 	private function define_public_hooks()
 	{
 
-		$plugin_public = new Lytics_Public($this->get_plugin_name(), $this->get_version());
+		$plugin_public = new Lytics_WP_Public($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_published_widgets');
-		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'lytics_greeting_shortcode');
+		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'render_greeting_shortcode');
 	}
 
 	/**

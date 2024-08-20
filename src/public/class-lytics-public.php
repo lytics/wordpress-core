@@ -6,7 +6,7 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/public
  */
 
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/public
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Public
+class Lytics_WP_Public
 {
 
 	/**
@@ -99,8 +99,8 @@ class Lytics_Public
 		include plugin_dir_path(__FILE__) . 'partials/lytics-public-display.php';
 	}
 
-	public function lytics_greeting_shortcode()
+	public function render_greeting_shortcode()
 	{
-		return 'Hello, World!';
+		return 'Coming soon!';
 	}
 }

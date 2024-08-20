@@ -6,7 +6,7 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/admin
  */
 
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/admin
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Admin
+class Lytics_WP_Admin
 {
 
 	/**

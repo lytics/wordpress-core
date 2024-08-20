@@ -6,7 +6,7 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/includes
  */
 
@@ -16,11 +16,12 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/includes
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Deactivator {
+class Lytics_Deactivator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -29,8 +30,5 @@ class Lytics_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
-
-	}
-
+	public static function deactivate() {}
 }

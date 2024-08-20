@@ -8,7 +8,7 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
+ * @package    LyticsWP
  * @subpackage Lytics/public/partials
  */
 
