@@ -7,9 +7,11 @@
 
 <?php
 if (isset($_GET['error']) && isset($_GET['lytics_settings_save_nonce'])) {
-  if (!wp_verify_nonce($_GET['lytics_settings_save_nonce'], 'lytics_settings_save_nonce')) {
+  $nonce = sanitize_text_field($_GET['lytics_settings_save_nonce']);
+  if (!wp_verify_nonce($nonce, 'lytics_settings_save_nonce')) {
     wp_die('Security check failed');
   } else {
+    $error = sanitize_text_field($_GET['error']);
     add_settings_error('lytics_core', 'lytics_access_token', $error, 'error');
   }
 }
@@ -175,7 +177,7 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
         </div>
       </div>
       <div class="container-fluid mt-3 d-flex justify-content-between">
-        <a href="<?php echo esc_url(admin_url('admin-post.php')); ?>?action=lytics_delete_settings" onclick="return confirm('Are you sure you want to delete all Lytics related settings? This action cannot be undone.');" class="btn btn-danger">Reset</a>
+        <a href="<?php echo esc_url(admin_url('admin-post.php')); ?>?action=delete_lyticswp_settings" onclick="return confirm('Are you sure you want to delete all Lytics related settings? This action cannot be undone.');" class="btn btn-danger">Reset</a>
         <input type="submit" name="submit" value="Save Settings" class="btn btn-primary">
       </div>
     </form>

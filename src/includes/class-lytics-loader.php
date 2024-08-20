@@ -7,7 +7,7 @@
  * @since      1.0.0
  *
  * @package    LyticsWP
- * @subpackage Lytics/includes
+ * @subpackage lyticswp/includes
  */
 
 /**
@@ -18,10 +18,10 @@
  * run function to execute the list of actions and filters.
  *
  * @package    LyticsWP
- * @subpackage Lytics/includes
+ * @subpackage lyticswp/includes
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Loader
+class Lyticswp_Loader
 {
 
 	/**

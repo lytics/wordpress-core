@@ -7,7 +7,7 @@
  * @since      1.0.0
  *
  * @package    LyticsWP
- * @subpackage Lytics/admin
+ * @subpackage lyticswp/admin
  */
 
 /**
@@ -17,10 +17,10 @@
  * enqueue the admin-specific stylesheet and JavaScript.
  *
  * @package    LyticsWP
- * @subpackage Lytics/admin
+ * @subpackage lyticswp/admin
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_WP_Admin
+class Lyticswp_Admin
 {
 
 	/**
@@ -65,10 +65,10 @@ class Lytics_WP_Admin
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Lytics_Loader as all of the hooks are defined
+		 * defined in Lyticswp_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Lytics_Loader will then create the relationship
+		 * The Lyticswp_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
@@ -132,7 +132,7 @@ class Lytics_WP_Admin
 	/**
 	 * Administrative menus for the plugin
 	 */
-	public function lytics_add_menu()
+	public function add_main_menu()
 	{
 		add_menu_page(
 			'Lytics', // Page title
@@ -150,7 +150,7 @@ class Lytics_WP_Admin
 			'Settings', // Menu title
 			'manage_options', // Capability required to access menu item
 			'lytics_settings', // Menu slug
-			array($this, 'lytics_settings_page') // Callback function to render the page content
+			array($this, 'lyticswp_settings_page') // Callback function to render the page content
 		);
 
 		add_submenu_page(
@@ -162,19 +162,19 @@ class Lytics_WP_Admin
 		);
 	}
 
-	public function lytics_plugin_settings_link($links)
+	public function lyticswp_settings_link($links)
 	{
-		$settings_link = '<a href="admin.php?page=lytics_settings">Settings</a>';
+		$settings_link = '<a href="admin.php?page=lyticswp_settings">Settings</a>';
 		array_unshift($links, $settings_link);
 		return $links;
 	}
 
-	public function lytics_settings_page()
+	public function lyticswp_settings_page()
 	{
 		include plugin_dir_path(__FILE__) . 'partials/lytics-admin-display.php';
 	}
 
-	public function lytics_handle_form_submission()
+	public function lyticswp_settings_handle_form_submission()
 	{
 		if (!current_user_can('manage_options')) {
 			wp_die('Unauthorized user');
@@ -267,7 +267,7 @@ class Lytics_WP_Admin
 		return FALSE;
 	}
 
-	public function register_widget_post_type()
+	public function register_lytics_widget_post_type()
 	{
 		$labels = array(
 			'name'               => _x('Widgets', 'post type general name', 'lytics-wp'),
@@ -291,7 +291,7 @@ class Lytics_WP_Admin
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
-			'show_in_menu'       => false, // We will add a submenu later
+			'show_in_menu'       => false,
 			'query_var'          => true,
 			'rewrite'            => array('slug' => 'widget'),
 			'capability_type'    => 'post',
@@ -317,7 +317,7 @@ class Lytics_WP_Admin
 		}, 10, 1);
 	}
 
-	public function add_widget_meta_boxes()
+	public function add_lytics_widget_meta_box()
 	{
 		add_meta_box(
 			'lytics_widget_meta',
@@ -337,11 +337,11 @@ class Lytics_WP_Admin
 		// error_log('Account ID: ' . $account_id);
 		$access_token = get_option('lytics_access_token');
 		// error_log('Token: ' . $access_token);
-		$engines = $this->getInterestEngines();
+		$engines = $this->get_lytics_interest_engines();
 		// error_log('Engines: ' . wp_json_encode($engines));
-		$collections = $this->getAudiences('content', false);
+		$collections = $this->get_lytics_audiences('content', false);
 		// error_log('Collections: ' . wp_json_encode($collections));
-		$segments = $this->getAudiences('user', true);
+		$segments = $this->get_lytics_audiences('user', true);
 		// error_log('Segments: ' . wp_json_encode($segments));
 
 		wp_nonce_field('lytics_widget_meta_box', 'lytics_widget_meta_box_nonce');
@@ -370,13 +370,10 @@ class Lytics_WP_Admin
 		echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
 	}
 
-	public function save_widget_meta_box_data($post_id)
+	public function save_lytics_widget_meta_box_data($post_id)
 	{
-		if (!isset($_POST['lytics_widget_meta_box_nonce'])) {
-			return $post_id;
-		}
 
-		if (!wp_verify_nonce($_POST['lytics_widget_meta_box_nonce'], 'lytics_widget_meta_box')) {
+		if (! isset($_POST['lytics_widget_meta_box_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['lytics_widget_meta_box_nonce'])), 'lytics_widget_meta_box')) {
 			return $post_id;
 		}
 
@@ -395,8 +392,8 @@ class Lytics_WP_Admin
 		}
 
 		if (isset($_POST['lytics_widget_description'])) {
-			$new_config_value = sanitize_text_field($_POST['lytics_widget_description']);
-			update_post_meta($post_id, 'lytics_widget_description', $new_config_value);
+			$new_description_value = sanitize_textarea_field($_POST['lytics_widget_description']);
+			update_post_meta($post_id, 'lytics_widget_description', $new_description_value);
 		}
 
 		if (isset($_POST['lytics_widget_configuration'])) {
@@ -410,7 +407,7 @@ class Lytics_WP_Admin
 		}
 	}
 
-	public function getAudiences($table, $onlyPublic)
+	public function get_lytics_audiences($table, $onlyPublic)
 	{
 		$apitoken = get_option('lytics_access_token');
 		if (empty($apitoken)) {
@@ -478,7 +475,7 @@ class Lytics_WP_Admin
 	}
 
 
-	public function getInterestEngines()
+	public function get_lytics_interest_engines()
 	{
 		$apitoken = get_option('lytics_access_token');
 		if (empty($apitoken)) {
@@ -530,18 +527,18 @@ class Lytics_WP_Admin
 	}
 
 
-	public function register_lytics_recommendations_block()
+	public function register_lytics_recommendation_block()
 	{
 		// Get configuration settings
 		$account_id = get_option('lytics_account_id');
 		// error_log('Account ID: ' . $account_id);
 
 		// Get available interest engines
-		$engines = $this->getInterestEngines();
+		$engines = $this->get_lytics_interest_engines();
 		// error_log('Engines: ' . wp_json_encode($engines));
 
 		// Get available content collections
-		$collections = $this->getAudiences('content', false);
+		$collections = $this->get_lytics_audiences('content', false);
 		// error_log('Collections: ' . wp_json_encode($collections));
 
 		// Register the block editor script.
@@ -579,34 +576,35 @@ class Lytics_WP_Admin
 		wp_enqueue_style('lytics-recommendations-editor-style', plugins_url('../assets/lytics-recommendations-block.css', __FILE__), array(), '1.0.0');
 	}
 
-	public function hide_default_widget_editor()
+	public function hide_default_lytics_widget_editor()
 	{
 		$target_post_type = 'widget';
 
-		if (!wp_verify_nonce($_POST['lytics_ignore_nonce'], 'lytics_ignore_nonce')) {
-			// do nothing since this param comes from wordpress natively
+		if (!isset($_POST['lytics_ignore_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['lytics_ignore_nonce']), 'lytics_ignore_nonce')) {
+			return; // Exit early if nonce verification fails
 		}
 
-		// get the post type and set it to a valid string
+		// Sanitize the post_type from the GET request
 		$post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : 'unknown';
 
-
-		// Check if the current post type matches
-		if (is_admin() && $post_type === $target_post_type) {
-			remove_post_type_support($target_post_type, 'editor');
-		}
-
-		// Additionally, check if the current post matches
-		if (is_admin() && isset($_GET['post'])) {
-			$post_id = intval($_GET['post']);
-			$post = get_post($post_id);
-			if ($post && $post->post_type === $target_post_type) {
+		if (is_admin()) {
+			// Check if the current post type matches the target
+			if ($post_type === $target_post_type) {
 				remove_post_type_support($target_post_type, 'editor');
+			}
+
+			// Additionally, check if a specific post is being edited
+			if (isset($_GET['post'])) {
+				$post_id = intval($_GET['post']);
+				$post = get_post($post_id);
+				if ($post && $post->post_type === $target_post_type) {
+					remove_post_type_support($target_post_type, 'editor');
+				}
 			}
 		}
 	}
 
-	public function lytics_register_settings()
+	public function register_lyticswp_settings()
 	{
 		register_setting('lytics_settings_group', 'lytics_access_token');
 		register_setting('lytics_settings_group', 'lytics_enable_tag');
@@ -619,14 +617,14 @@ class Lytics_WP_Admin
 		register_setting('lytics_settings_group', 'lytics_domain');
 	}
 
-	public function lytics_reset_settings()
+	public function reset_lyticswp_settings()
 	{
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'lytics-wp'));
 		}
 	}
 
-	public function lytics_delete_settings()
+	public function delete_lyticswp_settings()
 	{
 		// Check if user has permission to delete settings
 		if (!current_user_can('manage_options')) {

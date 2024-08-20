@@ -7,7 +7,7 @@
  * @since      1.0.0
  *
  * @package    LyticsWP
- * @subpackage Lytics/public
+ * @subpackage lyticswp/public
  */
 
 /**
@@ -17,10 +17,10 @@
  * enqueue the public-facing stylesheet and JavaScript.
  *
  * @package    LyticsWP
- * @subpackage Lytics/public
+ * @subpackage lyticswp/public
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_WP_Public
+class Lyticswp_Public
 {
 
 	/**

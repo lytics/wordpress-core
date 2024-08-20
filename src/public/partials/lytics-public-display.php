@@ -9,7 +9,7 @@
  * @since      1.0.0
  *
  * @package    LyticsWP
- * @subpackage Lytics/public/partials
+ * @subpackage lyticswp/public/partials
  */
 
 $account_id = get_option('lytics_account_id');
@@ -26,7 +26,7 @@ $args = array(
 
 $query = new WP_Query($args);
 
-function convertJsonToJs($config)
+function lyticswpConvertJsonToJs($config)
 {
   $cfgObj = json_decode($config);
   $details = $cfgObj->details;
@@ -79,7 +79,7 @@ if ($query->have_posts()) {
   while ($query->have_posts()) {
     $query->the_post();
     $widget = get_post_meta(get_the_ID(), '_lytics_widget_configuration', true);
-    $js = convertJsonToJs($widget);
+    $js = lyticswpConvertJsonToJs($widget);
     $outputJS .= $js;
   }
   wp_reset_postdata();

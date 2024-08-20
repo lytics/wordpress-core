@@ -34,24 +34,24 @@ define('LYTICSWP_VERSION', '1.0.0');
  * The code that runs during plugin activation.
  * This action is documented in includes/class-lytics-activator.php
  */
-function activate_lyticswp()
+function lyticswp_activate()
 {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-lytics-activator.php';
-	Lytics_Activator::activate();
+	Lyticswp_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-lytics-deactivator.php
  */
-function deactivate_lyticswp()
+function lyticswp_deactivate()
 {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-lytics-deactivator.php';
-	Lytics_Deactivator::deactivate();
+	Lyticswp_Deactivator::deactivate();
 }
 
-register_activation_hook(__FILE__, 'activate_lyticswp');
-register_deactivation_hook(__FILE__, 'deactivate_lyticswp');
+register_activation_hook(__FILE__, 'lyticswp_activate');
+register_deactivation_hook(__FILE__, 'lyticswp_deactivate');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -64,10 +64,10 @@ require plugin_dir_path(__FILE__) . 'includes/class-lytics.php';
  *
  * @since    1.0.0
  */
-function run_lyticswp()
+function lyticswp_run()
 {
 
 	$plugin = new Lyticswp();
 	$plugin->run();
 }
-run_lyticswp();
+lyticswp_run();

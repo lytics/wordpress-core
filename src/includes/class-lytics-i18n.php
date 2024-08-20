@@ -10,7 +10,7 @@
  * @since      1.0.0
  *
  * @package    LyticsWP
- * @subpackage Lytics/includes
+ * @subpackage lyticswp/includes
  */
 
 /**
@@ -21,10 +21,10 @@
  *
  * @since      1.0.0
  * @package    LyticsWP
- * @subpackage Lytics/includes
+ * @subpackage lyticswp/includes
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_i18n
+class Lyticswp_i18n
 {
 
 
