@@ -5,11 +5,11 @@
 **Contributors:** markjhayden  
 **Tags:** gutenberg, block, analytics, cdp, personalization
 **Requires at least:** 6.0  
-**Tested up to:** 6.2  
-**Requires PHP:** 7.4 
+**Tested up to:** 6.6.1  
+**Requires PHP:** 7.4
 **Stable tag:** 1.0.0  
 **License:** GPLv2 or later  
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
 This official Lytics for WordPress plugin brings the power of Lytics' personalization engine directly to WordPress.
 
@@ -29,8 +29,8 @@ Used to seamlessly integrate the most powerful capabilities of the Lytics Person
 ## Installation
 
 1. **Download the Plugin**: Obtain the latest version of the Lytics plugin from the master branch of this repository.
-2. **Install the Plugin**: Transfer all Lytics plugin, including outer `lytics` directory, to your WordPress  `wp-content/plugins` directory. Note: If developing locally this plugin utilizes Vite for its build process, which results in the creation of a `dist` directory. This `dist` directory should be considered the actual plugin directory. Additional details are provided below.
-3. **Activate the Plugin**: Use the WordPress admin panel to navigate to the *Plugins* page, locate the `Lytics` plugin, and activate it.
+2. **Install the Plugin**: Transfer all Lytics plugin, including outer `lytics` directory, to your WordPress `wp-content/plugins` directory. Note: If developing locally this plugin utilizes Vite for its build process, which results in the creation of a `dist` directory. This `dist` directory should be considered the actual plugin directory. Additional details are provided below.
+3. **Activate the Plugin**: Use the WordPress admin panel to navigate to the _Plugins_ page, locate the `Lytics` plugin, and activate it.
 
 ## Usage
 
@@ -60,22 +60,22 @@ As an open source project, we rely on community contributions to continue to imp
 
 1. **Install Yarn**: Ensure that `yarn` is installed on your development machine.
 2. **Repository Cloning**: Clone the Lytics plugin repository to a suitable location outside your WordPress installation.
-    ```sh
-    git clone https://github.com/lytics/wordpress-core.git
-    ```
+   ```sh
+   git clone https://github.com/lytics/wordpress-core.git
+   ```
 3. **Dependency Installation**: Navigate to the cloned plugin directory and run `yarn install` to install dependencies.
-    ```sh
-    cd wordpress-core
-    yarn install
-    ```
+   ```sh
+   cd wordpress-core
+   yarn install
+   ```
 4. **Development Build**: Compile development assets using `yarn`.
-    ```sh
-    yarn dev
-    ```
+   ```sh
+   yarn dev
+   ```
 5. **Symlink Creation**: Establish a symlink in your WordPress `wp-content/plugins/` directory pointing to your development copy of the Lytics plugin. This enables live testing without needing to copy files.
-    ```sh
-    ln -s /path/to/wordpress-core /path/to/wp-content/plugins/lytics
-    ```
+   ```sh
+   ln -s /path/to/wordpress-core /path/to/wp-content/plugins/lytics
+   ```
 
 ### Build
 
@@ -83,4 +83,5 @@ As an open source project, we rely on community contributions to continue to imp
 - To build the plugin for production: `yarn build`
 
 ## Support
-We'd love for you to join our growing community of Lytics developers. Simply visit https://lytics.com/joinslack and join the conversation. 
+
+We'd love for you to join our growing community of Lytics developers. Simply visit https://lytics.com/joinslack and join the conversation.

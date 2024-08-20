@@ -270,20 +270,20 @@ class Lytics_WP_Admin
 	public function register_widget_post_type()
 	{
 		$labels = array(
-			'name'               => _x('Widgets', 'post type general name', 'lytics'),
-			'singular_name'      => _x('Widget', 'post type singular name', 'lytics'),
-			'menu_name'          => _x('Widgets', 'admin menu', 'lytics'),
-			'name_admin_bar'     => _x('Widget', 'add new on admin bar', 'lytics'),
-			'add_new'            => _x('Add New', 'widget', 'lytics'),
-			'add_new_item'       => __('Add New Widget', 'lytics'),
-			'new_item'           => __('New Widget', 'lytics'),
-			'edit_item'          => __('Edit Widget', 'lytics'),
-			'view_item'          => __('View Widget', 'lytics'),
-			'all_items'          => __('All Widgets', 'lytics'),
-			'search_items'       => __('Search Widgets', 'lytics'),
-			'parent_item_colon'  => __('Parent Widgets:', 'lytics'),
-			'not_found'          => __('No widgets found.', 'lytics'),
-			'not_found_in_trash' => __('No widgets found in Trash.', 'lytics'),
+			'name'               => _x('Widgets', 'post type general name', 'lytics-wp'),
+			'singular_name'      => _x('Widget', 'post type singular name', 'lytics-wp'),
+			'menu_name'          => _x('Widgets', 'admin menu', 'lytics-wp'),
+			'name_admin_bar'     => _x('Widget', 'add new on admin bar', 'lytics-wp'),
+			'add_new'            => _x('Add New', 'widget', 'lytics-wp'),
+			'add_new_item'       => __('Add New Widget', 'lytics-wp'),
+			'new_item'           => __('New Widget', 'lytics-wp'),
+			'edit_item'          => __('Edit Widget', 'lytics-wp'),
+			'view_item'          => __('View Widget', 'lytics-wp'),
+			'all_items'          => __('All Widgets', 'lytics-wp'),
+			'search_items'       => __('Search Widgets', 'lytics-wp'),
+			'parent_item_colon'  => __('Parent Widgets:', 'lytics-wp'),
+			'not_found'          => __('No widgets found.', 'lytics-wp'),
+			'not_found_in_trash' => __('No widgets found in Trash.', 'lytics-wp'),
 		);
 
 		$args = array(
@@ -416,7 +416,7 @@ class Lytics_WP_Admin
 		if (empty($apitoken)) {
 			return [
 				[
-					'label' => esc_html__('Uh oh, no token found!', 'text-domain'),
+					'label' => esc_html__('Uh oh, no token found!', 'lyticswp'),
 					'value' => 'oopsie',
 					'type' => 'string'
 				]
@@ -622,7 +622,7 @@ class Lytics_WP_Admin
 	public function lytics_reset_settings()
 	{
 		if (!current_user_can('manage_options')) {
-			wp_die(esc_html__('You do not have sufficient permissions to access this page.'));
+			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'lytics-wp'));
 		}
 	}
 
@@ -630,7 +630,7 @@ class Lytics_WP_Admin
 	{
 		// Check if user has permission to delete settings
 		if (!current_user_can('manage_options')) {
-			wp_die(esc_html__('You do not have sufficient permissions to access this page.'));
+			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'lytics-wp'));
 		}
 
 		// Delete all options related to your plugin

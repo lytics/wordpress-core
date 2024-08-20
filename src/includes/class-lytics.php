@@ -36,7 +36,7 @@ class Lyticswp
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'lyticswp';
+		$this->plugin_name = 'lytics-wp';
 
 		$this->load_dependencies();
 		$this->set_locale();
