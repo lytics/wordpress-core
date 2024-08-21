@@ -45,6 +45,7 @@
     "@wordpress/editor": "^14.1.0",
     "@wordpress/element": "^6.1.0",
     "@wordpress/i18n": "^5.1.0",
+    "bootstrap": "5.3.3",
     "codemirror": "5.62.0",
     "final-form": "^4.20.10",
     "formBuilder": "^3.19.7",

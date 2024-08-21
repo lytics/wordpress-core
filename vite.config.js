@@ -129,6 +129,7 @@ export default defineConfig({
           __dirname,
           "./src/admin/js/codemirror/index.js"
         ),
+        bootstrap: path.resolve(__dirname, "./src/admin/js/bootstrap/index.js"),
       },
       output: {
         entryFileNames: (chunkInfo) => {
@@ -146,11 +147,16 @@ export default defineConfig({
             return "admin/js/lytics-widget-wizard.js";
           } else if (chunkInfo.name === "codemirror") {
             return "admin/js/codemirror.js";
+          } else if (chunkInfo.name === "bootstrap") {
+            return "admin/js/bootstrap.js";
           }
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith(".css")) {
             if (assetInfo.name.includes("codemirror")) {
+              return "admin/assets/[name].css";
+            }
+            if (assetInfo.name.includes("bootstrap")) {
               return "admin/assets/[name].css";
             }
             return "assets/[name].css";
