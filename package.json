@@ -45,6 +45,7 @@
     "@wordpress/editor": "^14.1.0",
     "@wordpress/element": "^6.1.0",
     "@wordpress/i18n": "^5.1.0",
+    "codemirror": "5.62.0",
     "final-form": "^4.20.10",
     "formBuilder": "^3.19.7",
     "jquery": "^3.7.1",
@@ -63,6 +64,6 @@
   },
   "volta": {
     "node": "20.11.0",
-    "yarn": "1.22.22"
+    "yarn": "1.22.18"
   }
 }

@@ -62,14 +62,6 @@ if (isset($account_details['packages']) && array_key_exists('developer_free', $a
     document.querySelector("form").addEventListener("submit", function() {
       scrollToTop();
     });
-
-    var jsonEditor = CodeMirror.fromTextArea(document.getElementById("jsonInput"), {
-      mode: "application/json",
-      lineNumbers: true,
-      autoCloseBrackets: true,
-      matchBrackets: true,
-      theme: "monokai"
-    });
   });
 </script>
 

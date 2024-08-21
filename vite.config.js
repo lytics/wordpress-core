@@ -125,6 +125,10 @@ export default defineConfig({
           __dirname,
           "./src/admin/js/lytics-widget-wizard/index.js"
         ),
+        codemirror: path.resolve(
+          __dirname,
+          "./src/admin/js/codemirror/index.js"
+        ),
       },
       output: {
         entryFileNames: (chunkInfo) => {
@@ -140,10 +144,15 @@ export default defineConfig({
             return "admin/js/pathforaInterface.js";
           } else if (chunkInfo.name === "lytics-widget-wizard") {
             return "admin/js/lytics-widget-wizard.js";
+          } else if (chunkInfo.name === "codemirror") {
+            return "admin/js/codemirror.js";
           }
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith(".css")) {
+            if (assetInfo.name.includes("codemirror")) {
+              return "admin/assets/[name].css";
+            }
             return "assets/[name].css";
           }
           return "assets/[name].[ext]";
