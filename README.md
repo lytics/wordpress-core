@@ -26,6 +26,28 @@ Used to seamlessly integrate the most powerful capabilities of the Lytics Person
 - **Content Personalization:** Enhance user experience by dynamically personalizing site content, tailored to individual user preferences and behaviors as understood by Lytics.
 - **Content Recommendation:** Improve engagement and user retention through intelligent content recommendations, powered by Lytics' deep learning about user preferences and behaviors.
 
+## Lytics.com Feature Support
+
+- Supports core [Lytics tracking and personalization tag installation](https://docs.lytics.com/docs/lytics-javascript-tag).
+- Supports [data collection and Lytics profile building](https://docs.lytics.com/docs/lytics-javascript-tag#data-collection).
+- Supports creation and delivery of [Lytics Web Experiences via Personalization SDK](https://docs.lytics.com/docs/personalization-pathfora).
+- Supports real-time [Lytics powered content recommendations](https://docs.lytics.com/docs/recommendations).
+- Supports real-time [personalization based on Lytics profile](https://docs.lytics.com/docs/lytics-javascript-tag#accessing-visitor-profiles).
+
+## Privacy
+
+User Data: This plugin does not collect any user data. However, the tracking code added by this plugin is used by Lytics to collect a variety of user data in support of building your private customer profiles. You can learn more about [Lytics Privacy here](https://www.lytics.com/privacy-policy/).
+
+Cookies: The Lytics tracking tag installed uses first party cookies to identify both anonymous and known visitors as well as optional user preferences.
+
+Services: This plugin connects to the following Lytics APIs either directly or via the implemented tracking tag:
+
+- [Data Collection (GET/POST)](https://docs.lytics.com/reference/data-json-upload)
+- [Web Personalization (GET)](https://docs.lytics.com/reference/web-personalization-1)
+- [Content Recommendation (GET)](https://docs.lytics.com/reference/public-content-recommendation)
+- [Segments/Collections (GET)](https://docs.lytics.com/reference/get_segment)
+- Note: Additional API calls may be made to official APIs managed and maintained exclusively by Lytics.
+
 ## Installation
 
 1. **Download the Plugin**: Obtain the latest version of the Lytics plugin from the master branch of this repository.
