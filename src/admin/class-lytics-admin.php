@@ -393,7 +393,7 @@ class Lyticswp_Admin
 		echo '<input type="text" style="display:none;" id="lytics_widget_status" name="lytics_widget_status" value="' . esc_attr($status_value) . '" size="25" />';
 		echo '<textarea id="lytics_widget_description" style="display:none;" name="lytics_widget_description" rows="4" cols="50">' . esc_textarea($description_value) . '</textarea>';
 		echo '</div>';
-		echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
+		// echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
 	}
 
 	public function save_lyticswp_widget_meta_box_data($post_id)
@@ -604,30 +604,7 @@ class Lyticswp_Admin
 
 	public function hide_default_lyticswp_widget_editor()
 	{
-		$target_post_type = 'lyticswp_widget';
-
-		if (!isset($_POST['lytics_ignore_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['lytics_ignore_nonce']), 'lytics_ignore_nonce')) {
-			return; // Exit early if nonce verification fails
-		}
-
-		// Sanitize the post_type from the GET request
-		$post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : 'unknown';
-
-		if (is_admin()) {
-			// Check if the current post type matches the target
-			if ($post_type === $target_post_type) {
-				remove_post_type_support($target_post_type, 'editor');
-			}
-
-			// Additionally, check if a specific post is being edited
-			if (isset($_GET['post'])) {
-				$post_id = intval($_GET['post']);
-				$post = get_post($post_id);
-				if ($post && $post->post_type === $target_post_type) {
-					remove_post_type_support($target_post_type, 'editor');
-				}
-			}
-		}
+		remove_post_type_support('lyticswp_widget', 'editor');
 	}
 
 	public function register_lyticswp_settings()
