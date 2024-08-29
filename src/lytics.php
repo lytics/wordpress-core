@@ -28,7 +28,7 @@ if (!defined('WPINC')) {
 /**
  * Current plugin version.
  */
-define('LYTICSWP_VERSION', '1.0.0');
+define('LYTICS_WP_VERSION', '1.0.0');
 
 /**
  * The code that runs during plugin activation.

@@ -11,7 +11,13 @@
  * @package    LyticsWP
  * @subpackage lyticswp/public/partials
  */
+?>
 
+<?php
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
+<?php
 $account_id = get_option('lyticswp_account_id');
 $tag_enabled = get_option('lyticswp_enable_tag');
 

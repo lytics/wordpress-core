@@ -101,49 +101,7 @@ class Lyticswp_Admin
 			false
 		);
 
-		// CodeMirror JS
-		wp_enqueue_script(
-			$this->plugin_name . '-codemirror-js',
-			plugin_dir_url(__FILE__) . 'js/codemirror.js',
-			array(),
-			'5.62.0',
-			false
-		);
-
-		wp_enqueue_style(
-			$this->plugin_name . '-codemirror-css',
-			plugin_dir_url(__FILE__) . 'assets/codemirror.css',
-			array(),
-			'5.62.0',
-			false
-		);
-
-		// Bootstap JS
-		wp_enqueue_script(
-			$this->plugin_name . '-bootstrap-js',
-			plugin_dir_url(__FILE__) . 'js/bootstrap.js',
-			array(),
-			'5.6.6',
-			false
-		);
-
-		wp_enqueue_style(
-			$this->plugin_name . '-bootstrap-css',
-			plugin_dir_url(__FILE__) . 'assets/bootstrap.css',
-			array(),
-			'5.6.6',
-			false
-		);
-
 		add_filter('script_loader_tag', function ($tag, $handle) {
-			if ($handle === $this->plugin_name . '-codemirror-js') {
-				return str_replace('<script ', '<script type="module" ', $tag);
-			}
-
-			if ($handle === $this->plugin_name . '-bootstrap-js') {
-				return str_replace('<script ', '<script type="module" ', $tag);
-			}
-
 			if ($handle === $this->plugin_name . '-widget-wizard') {
 				return str_replace('<script ', '<script type="module" ', $tag);
 			}
@@ -153,6 +111,34 @@ class Lyticswp_Admin
 
 			return $tag;
 		}, 10, 2);
+	}
+
+	/**
+	 * Register the codemirror code editor for the admin area.
+	 */
+	public function enqueue_custom_code_editor()
+	{
+		$settings = wp_enqueue_code_editor(array('type' => 'application/json'));
+
+		if (false === $settings) {
+			return;
+		}
+
+		$settings['lint'] = false;
+
+		// Enqueue the code editor
+		wp_enqueue_script('wp-codemirror');
+		wp_enqueue_style('wp-codemirror');
+		wp_add_inline_script(
+			'wp-codemirror',
+			sprintf(
+				'jQuery(function($){
+							var settings = %s;
+							var editor = wp.codeEditor.initialize($("textarea#lytics-wp-config-editor"), settings);
+					});',
+				wp_json_encode($settings)
+			)
+		);
 	}
 
 	/**
@@ -231,7 +217,11 @@ class Lyticswp_Admin
 		// Validate that access token is valid
 		$accountDetails = $this->get_lytics_account_details($access_token);
 		if (!$accountDetails) {
-			wp_redirect(add_query_arg('error', 'Invalid Access Token.', admin_url('admin.php?page=lyticswp_settings')));
+
+			wp_redirect(add_query_arg(array(
+				'error' => 'Invalid Access Token.',
+				'lyticswp_settings_save_nonce' => wp_create_nonce('lyticswp_settings_save_nonce')
+			), admin_url('admin.php?page=lyticswp_settings')));
 			exit;
 		}
 
@@ -247,7 +237,7 @@ class Lyticswp_Admin
 		update_option('lyticswp_tag_config', $tag_config);
 
 		// Redirect back to the settings page
-		wp_redirect(admin_url('admin.php?page=lyticswp_settings'));
+		wp_redirect(add_query_arg('settings-updated', 'true', admin_url('admin.php?page=lyticswp_settings')));
 		exit;
 	}
 
@@ -393,7 +383,6 @@ class Lyticswp_Admin
 		echo '<input type="text" style="display:none;" id="lytics_widget_status" name="lytics_widget_status" value="' . esc_attr($status_value) . '" size="25" />';
 		echo '<textarea id="lytics_widget_description" style="display:none;" name="lytics_widget_description" rows="4" cols="50">' . esc_textarea($description_value) . '</textarea>';
 		echo '</div>';
-		// echo '<script>document.querySelector(\'#post-body-content\').style.display = \'none\';document.querySelector(\'.notice\').style.display = \'none\';</script>';
 	}
 
 	public function save_lyticswp_widget_meta_box_data($post_id)
@@ -439,7 +428,7 @@ class Lyticswp_Admin
 		if (empty($apitoken)) {
 			return [
 				[
-					'label' => esc_html__('Uh oh, no token found!', 'lyticswp'),
+					'label' => esc_html__('Uh oh, no token found!', 'lytics-wp'),
 					'value' => 'oopsie',
 					'type' => 'string'
 				]

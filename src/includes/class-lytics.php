@@ -31,8 +31,8 @@ class Lyticswp
 	 */
 	public function __construct()
 	{
-		if (defined('LYTICSWP_VERSION')) {
-			$this->version = LYTICSWP_VERSION;
+		if (defined('LYTICS_WP_VERSION')) {
+			$this->version = LYTICS_WP_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -97,6 +97,7 @@ class Lyticswp
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_custom_code_editor');
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_main_menu');
 		$this->loader->add_filter('plugin_action_links_lyticswp/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lyticswp_settings_link');
 		$this->loader->add_action('admin_post_lyticswp_process_form', $plugin_admin, 'lyticswp_settings_handle_form_submission');
