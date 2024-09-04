@@ -795,6 +795,11 @@
     react-dom "^18.2.0"
     react-to-webcomponent "^2.0.0"
 
+"@lytics/recommendation-block@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@lytics/recommendation-block/-/recommendation-block-1.0.0.tgz#0709136da1fc3da73b86fe828bcd1721eb25e7bf"
+  integrity sha512-k/5VIghztpXsqpBwx8S/V6J4nbHO1RGtlIcW7fyUX+q2/WVFYBp6oNGvtLFgWAkHV2tlink7IbROZ0XkeC8HUw==
+
 "@material-ui/core@^4.12.4":
   version "4.12.4"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.12.4.tgz#4ac17488e8fcaf55eb6a7f5efb2a131e10138a73"
@@ -2914,11 +2919,6 @@ binary-extensions@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
-
-bootstrap@5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.3.tgz#de35e1a765c897ac940021900fcbb831602bac38"
-  integrity sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==
 
 brace-expansion@^1.1.7:
   version "1.1.11"

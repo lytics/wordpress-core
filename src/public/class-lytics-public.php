@@ -76,7 +76,7 @@ class Lyticswp_Public
 
 		wp_enqueue_script(
 			$this->plugin_name . '-recommendation-renderer',
-			plugin_dir_url(__FILE__) . 'js/lytics-recommendation-render.js',
+			plugin_dir_url(__FILE__) . 'js/lytics-prod-recommendation-block.js',
 			array('jquery'),
 			$this->version,
 			true

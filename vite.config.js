@@ -64,8 +64,20 @@ export default defineConfig({
           dest: "./admin",
         },
         {
-          src: "./src/public",
-          dest: ".",
+          src: "./src/public/css",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/partials",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/*.php",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/js/lytics-public.js",
+          dest: "./public/js",
         },
         {
           src: "./src/languages",
@@ -117,6 +129,10 @@ export default defineConfig({
           __dirname,
           "./src/admin/js/lytics-widget-wizard/index.js"
         ),
+        "lytics-prod-recommendation-block": path.resolve(
+          __dirname,
+          "./src/public/js/prod-recommendation-block/index.js"
+        ),
       },
       output: {
         entryFileNames: (chunkInfo) => {
@@ -128,6 +144,8 @@ export default defineConfig({
             return "admin/js/lytics-recommendation-render.js";
           } else if (chunkInfo.name === "lytics-widget-wizard") {
             return "admin/js/lytics-widget-wizard.js";
+          } else if (chunkInfo.name === "lytics-prod-recommendation-block") {
+            return "public/js/lytics-prod-recommendation-block.js";
           }
         },
         assetFileNames: (assetInfo) => {

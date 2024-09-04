@@ -9,7 +9,7 @@ const components = window.wp.components;
 const renderBlockContent = (attributes: any): React.JSX.Element => {
   let payload = {
     account_id: attributes.accountId,
-    element: `rec-container-${attributes.blockId}`,
+    element: `lytics-rec-container-${attributes.blockId}`,
     block_id: attributes.blockId,
     recommendation_type: attributes.recommendationKind,
     content_collection_id: attributes.collection,
@@ -38,11 +38,11 @@ const renderBlockContent = (attributes: any): React.JSX.Element => {
 
   const element = (
     <div
-      id={`rec-container-${attributes.block_id}`}
+      id={`lytics-rec-container-${attributes.block_id}`}
       data-rec-config={encodedPayload}
     >
-      <div className="rec-wrapper">
-        <div className="loading">Loading edit...</div>
+      <div className="lytics-rec-wrapper">
+        <div className="lytics-rec-loading"></div>
       </div>
     </div>
   );
