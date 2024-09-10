@@ -93,7 +93,8 @@ export default defineConfig({
         },
         {
           src: "./WPORGREADME.md",
-          dest: "./README.md",
+          dest: ".",
+          rename: "README.md",
         },
       ],
     }),

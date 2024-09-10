@@ -33,7 +33,7 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@lytics/experience-editor": "^1.0.0",
+    "@lytics/experience-editor": "^1.0.1",
     "@lytics/recommendation-block": "^1.0.0",
     "@material-ui/core": "^4.12.4",
     "@mui/icons-material": "^5.15.14",

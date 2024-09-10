@@ -778,10 +778,10 @@
   dependencies:
     "@lezer/common" "^1.0.0"
 
-"@lytics/experience-editor@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@lytics/experience-editor/-/experience-editor-1.0.0.tgz#ec07d280e27fc2ef681cd966b9ac28b1a062f27b"
-  integrity sha512-igImtNtxJfGi5C1uCpsJZnkVbZaTbkttbXtQUeLB4z72lyEcM7l1d9bgRpjVJelkS1lXF6dBVQzvWH+bVOmSPg==
+"@lytics/experience-editor@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@lytics/experience-editor/-/experience-editor-1.0.1.tgz#de28e896c56338a4609000e61b9e00181a219ecc"
+  integrity sha512-QuzTO2dYtOC+BXn5J+6LnCi9B0ANrOfquLMA6DS1C2NvtAKcoFuzWf9IYuU9LW6uWn5ZAhvIxFwyxWpxfTrg1w==
   dependencies:
     "@codemirror/lang-javascript" "^6.2.2"
     "@codemirror/view" "^6.32.0"
