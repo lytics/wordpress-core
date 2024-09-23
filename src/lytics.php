@@ -4,14 +4,14 @@
  * Lytics core WordPres plugin file
  *
  * @link              https://lytics.com
- * @since             1.0.1
+ * @since             1.0.3
  * @package           LyticsWP
  *
  * @wordpress-plugin
  * Plugin Name:       Lytics: Personalization Engine
  * Plugin URI:        https://wordpress.com/plugins/lyticswp
  * Description:       The Lytics WordPress Plugin seamlessly integrates your website with the Lytics Customer Data Platform (CDP). This integration empowers site administrators to leverage extensive visitor data and personalization capabilities, enhancing user experiences and building a robust first-party data asset within their Drupal site.
- * Version:           1.0.1
+ * Version:           1.0.3
  * Author:            Lytics
  * Author URI:        https://lytics.com/
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if (!defined('WPINC')) {
 /**
  * Current plugin version.
  */
-define('LYTICS_WP_VERSION', '1.0.0');
+define('LYTICS_WP_VERSION', '1.0.3');
 
 /**
  * The code that runs during plugin activation.
