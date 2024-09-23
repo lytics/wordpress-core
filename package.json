@@ -1,6 +1,6 @@
 {
   "name": "wordpress-lytics",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": "git@github.com:lytics/wordpress-core.git",
   "author": "Mark Hayden <mark.hayden@lytics.com>",
   "license": "MIT",

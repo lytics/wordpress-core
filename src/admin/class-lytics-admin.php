@@ -528,10 +528,13 @@ class Lyticswp_Admin
 
 		$options = [];
 		foreach ($allEngines as $engine) {
-			$options[$engine['id']] = array(
-				'label' => $engine['label'],
-				'value' => $engine['id'],
-			);
+			$label = isset($engine['label']) ? $engine['label'] : '(no name)';
+			if (isset($engine['id'])) {
+				$options[$engine['id']] = array(
+					'label' => $label,
+					'value' => $engine['id'],
+				);
+			}
 		}
 
 		usort($options, function ($a, $b) {
