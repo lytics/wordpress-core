@@ -6,8 +6,8 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
- * @subpackage Lytics/includes
+ * @package    LyticsWP
+ * @subpackage lyticswp/includes
  */
 
 /**
@@ -16,11 +16,12 @@
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Lytics
- * @subpackage Lytics/includes
+ * @package    LyticsWP
+ * @subpackage lyticswp/includes
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Activator {
+class Lyticswp_Activator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -29,8 +30,5 @@ class Lytics_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
-
-	}
-
+	public static function activate() {}
 }

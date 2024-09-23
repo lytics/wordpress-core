@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     watch: {
-      include: ["src/**"],
+      include: ["src/**/*"],
       exclude: ["node_modules", "dist", ".git"],
     },
   },
@@ -64,8 +64,20 @@ export default defineConfig({
           dest: "./admin",
         },
         {
-          src: "./src/public",
-          dest: ".",
+          src: "./src/public/css",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/partials",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/*.php",
+          dest: "./public",
+        },
+        {
+          src: "./src/public/js/lytics-public.js",
+          dest: "./public/js",
         },
         {
           src: "./src/languages",
@@ -80,8 +92,9 @@ export default defineConfig({
           dest: ".",
         },
         {
-          src: "./README.md",
+          src: "./WPORGREADME.md",
           dest: ".",
+          rename: "README.md",
         },
       ],
     }),
@@ -113,17 +126,13 @@ export default defineConfig({
           __dirname,
           "./src/admin/js/lytics-recommendations-block/view.ts"
         ),
-        "lytics-pathfora-helper": path.resolve(
-          __dirname,
-          "./src/admin/js/lytics-pathfora-helper/index.js"
-        ),
-        "lytics-pathfora-interface": path.resolve(
-          __dirname,
-          "./src/admin/js/lytics-pathfora-interface/index.js"
-        ),
         "lytics-widget-wizard": path.resolve(
           __dirname,
           "./src/admin/js/lytics-widget-wizard/index.js"
+        ),
+        "lytics-prod-recommendation-block": path.resolve(
+          __dirname,
+          "./src/public/js/prod-recommendation-block/index.js"
         ),
       },
       output: {
@@ -134,12 +143,10 @@ export default defineConfig({
             return "admin/js/lytics-recommendations-block.js";
           } else if (chunkInfo.name === "lytics-recommendation-render") {
             return "admin/js/lytics-recommendation-render.js";
-          } else if (chunkInfo.name === "lytics-pathfora-helper") {
-            return "admin/js/pathforaHelper.js";
-          } else if (chunkInfo.name === "lytics-pathfora-interface") {
-            return "admin/js/pathforaInterface.js";
           } else if (chunkInfo.name === "lytics-widget-wizard") {
             return "admin/js/lytics-widget-wizard.js";
+          } else if (chunkInfo.name === "lytics-prod-recommendation-block") {
+            return "public/js/lytics-prod-recommendation-block.js";
           }
         },
         assetFileNames: (assetInfo) => {

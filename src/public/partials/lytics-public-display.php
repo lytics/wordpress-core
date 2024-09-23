@@ -8,25 +8,31 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
- * @subpackage Lytics/public/partials
+ * @package    LyticsWP
+ * @subpackage lyticswp/public/partials
  */
+?>
 
-$account_id = get_option('lytics_account_id');
-$tag_enabled = get_option('lytics_enable_tag');
+<?php
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
+<?php
+$account_id = get_option('lyticswp_account_id');
+$tag_enabled = get_option('lyticswp_enable_tag');
 
 if (!$account_id || !$tag_enabled) {
   return;
 }
 
 $args = array(
-  'post_type' => 'widget',
+  'post_type' => 'lyticswp_widget',
   'posts_per_page' => -1,
 );
 
 $query = new WP_Query($args);
 
-function convertJsonToJs($config)
+function lyticswpConvertJsonToJs($config)
 {
   $cfgObj = json_decode($config);
   $details = $cfgObj->details;
@@ -78,10 +84,11 @@ if ($query->have_posts()) {
 
   while ($query->have_posts()) {
     $query->the_post();
-    $widget = get_post_meta(get_the_ID(), '_lytics_widget_configuration', true);
-    $js = convertJsonToJs($widget);
+    $widget = get_post_meta(get_the_ID(), '_lyticswp_widget_configuration', true);
+    $js = lyticswpConvertJsonToJs($widget);
     $outputJS .= $js;
   }
+
   wp_reset_postdata();
 }
 
@@ -102,7 +109,7 @@ echo '
     var __ly_evaluate_widgets = function(entity){
       var segmentMembership = entity?.data?.user?.segments || []; 
       
-      ' . esc_html($outputJS) . '
+      ' . $outputJS . '
       
       __ly_render_widgets = [];
       __ly_modules.forEach(function(module){

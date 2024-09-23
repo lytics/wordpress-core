@@ -6,8 +6,8 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
- * @subpackage Lytics/public
+ * @package    LyticsWP
+ * @subpackage lyticswp/public
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Lytics
- * @subpackage Lytics/public
+ * @package    LyticsWP
+ * @subpackage lyticswp/public
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Public
+class Lyticswp_Public
 {
 
 	/**
@@ -76,7 +76,7 @@ class Lytics_Public
 
 		wp_enqueue_script(
 			$this->plugin_name . '-recommendation-renderer',
-			plugin_dir_url(__FILE__) . 'js/lytics-recommendation-render.js',
+			plugin_dir_url(__FILE__) . 'js/lytics-prod-recommendation-block.js',
 			array('jquery'),
 			$this->version,
 			true
@@ -99,8 +99,8 @@ class Lytics_Public
 		include plugin_dir_path(__FILE__) . 'partials/lytics-public-display.php';
 	}
 
-	public function lytics_greeting_shortcode()
+	public function render_greeting_shortcode()
 	{
-		return 'Hello, World!';
+		return 'Coming soon!';
 	}
 }

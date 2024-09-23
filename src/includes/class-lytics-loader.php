@@ -6,8 +6,8 @@
  * @link       https://lytics.com
  * @since      1.0.0
  *
- * @package    Lytics
- * @subpackage Lytics/includes
+ * @package    LyticsWP
+ * @subpackage lyticswp/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Lytics
- * @subpackage Lytics/includes
+ * @package    LyticsWP
+ * @subpackage lyticswp/includes
  * @author     Lytics <product@lytics.com>
  */
-class Lytics_Loader
+class Lyticswp_Loader
 {
 
 	/**

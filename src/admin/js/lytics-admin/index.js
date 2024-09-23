@@ -1,1 +1,1 @@
-// Global admin JS goes here.
+// Upcoming global admin js file

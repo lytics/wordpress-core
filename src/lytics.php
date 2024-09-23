@@ -4,14 +4,14 @@
  * Lytics core WordPres plugin file
  *
  * @link              https://lytics.com
- * @since             1.0.0
+ * @since             1.0.1
  * @package           LyticsWP
  *
  * @wordpress-plugin
- * Plugin Name:       LyticsWP
- * Plugin URI:        https://https://wordpress.com/plugins/lytics
+ * Plugin Name:       Lytics: Personalization Engine
+ * Plugin URI:        https://wordpress.com/plugins/lyticswp
  * Description:       The Lytics WordPress Plugin seamlessly integrates your website with the Lytics Customer Data Platform (CDP). This integration empowers site administrators to leverage extensive visitor data and personalization capabilities, enhancing user experiences and building a robust first-party data asset within their Drupal site.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Lytics
  * Author URI:        https://lytics.com/
  * License:           GPL-2.0+
@@ -28,30 +28,30 @@ if (!defined('WPINC')) {
 /**
  * Current plugin version.
  */
-define('LYTICS_VERSION', '1.0.0');
+define('LYTICS_WP_VERSION', '1.0.0');
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-lytics-activator.php
  */
-function activate_lytics()
+function lyticswp_activate()
 {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-lytics-activator.php';
-	Lytics_Activator::activate();
+	Lyticswp_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-lytics-deactivator.php
  */
-function deactivate_lytics()
+function lyticswp_deactivate()
 {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-lytics-deactivator.php';
-	Lytics_Deactivator::deactivate();
+	Lyticswp_Deactivator::deactivate();
 }
 
-register_activation_hook(__FILE__, 'activate_lytics');
-register_deactivation_hook(__FILE__, 'deactivate_lytics');
+register_activation_hook(__FILE__, 'lyticswp_activate');
+register_deactivation_hook(__FILE__, 'lyticswp_deactivate');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -64,10 +64,10 @@ require plugin_dir_path(__FILE__) . 'includes/class-lytics.php';
  *
  * @since    1.0.0
  */
-function run_lytics()
+function lyticswp_run()
 {
 
-	$plugin = new Lytics();
+	$plugin = new Lyticswp();
 	$plugin->run();
 }
-run_lytics();
+lyticswp_run();

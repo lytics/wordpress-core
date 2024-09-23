@@ -33,6 +33,8 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@lytics/experience-editor": "^1.0.1",
+    "@lytics/recommendation-block": "^1.0.0",
     "@material-ui/core": "^4.12.4",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.13",
@@ -45,6 +47,7 @@
     "@wordpress/editor": "^14.1.0",
     "@wordpress/element": "^6.1.0",
     "@wordpress/i18n": "^5.1.0",
+    "codemirror": "5.62.0",
     "final-form": "^4.20.10",
     "formBuilder": "^3.19.7",
     "jquery": "^3.7.1",
@@ -63,6 +66,6 @@
   },
   "volta": {
     "node": "20.11.0",
-    "yarn": "1.22.22"
+    "yarn": "1.22.18"
   }
 }

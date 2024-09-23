@@ -19,13 +19,22 @@ class LyticsRender {
   };
 
   render = async () => {
-    const recContainers = document.querySelectorAll('[id*="rec-container-"]');
+    const recContainers = document.querySelectorAll(
+      '[id*="lytics-rec-container-"]'
+    );
 
     for (const element of Array.from(recContainers)) {
       // get rec-wrapper element within each rec-container
-      const recWrapper = element.querySelector(".rec-wrapper");
+      const recWrapper = element.querySelector(".lytics-rec-wrapper");
       if (!recWrapper) {
-        console.error('No element found with the class "rec-wrapper"');
+        console.error('No element found with the class "lytics-rec-wrapper"');
+        return;
+      }
+
+      // determine environment
+      const env = element.getAttribute("data-rec-env");
+      if (env === "prod") {
+        console.log("exiting because production");
         return;
       }
 
@@ -49,8 +58,6 @@ class LyticsRender {
         showBody: recommendationConfig?.show_body,
       } as RecommendationOptions;
 
-      // console.log("Recommendation Config:", recommendationConfig);
-
       recWrapper.innerHTML = "";
 
       let recs = [];
@@ -71,15 +78,7 @@ class LyticsRender {
 
         const recItem = document.createElement("div");
 
-        recItem.classList.add(
-          "flex-container",
-          "flex-column",
-          "justify-start",
-          "align-stretch",
-          "flex-1",
-          "gap-small",
-          "rec-item"
-        );
+        recItem.classList.add("lytics-rec-item");
 
         if (options.showImage) {
           if (
@@ -88,7 +87,7 @@ class LyticsRender {
             (rec?.imageurls?.length > 0 && rec?.imageurls?.[0] !== "")
           ) {
             const img = document.createElement("img");
-            img.classList.add("rec-img");
+            img.classList.add("lytics-rec-img");
             img.alt = `Image of ${rec.title}`;
             img.src = rec.primaryimageurl || rec.imageurls[0];
             recItem.appendChild(img);
@@ -99,7 +98,7 @@ class LyticsRender {
 
         if (options.showHeadline) {
           const recTitle = document.createElement("div");
-          recTitle.classList.add("rec-title");
+          recTitle.classList.add("lytics-rec-title");
           recItem.appendChild(recTitle);
 
           const titleLink = document.createElement("a");
@@ -111,7 +110,7 @@ class LyticsRender {
 
         if (options.showBody && rec.description) {
           const description = document.createElement("p");
-          description.classList.add("rec-description");
+          description.classList.add("lytics-rec-description");
           description.textContent = rec.description;
           recItem.appendChild(description);
         }

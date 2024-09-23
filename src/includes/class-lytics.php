@@ -7,7 +7,7 @@
  * public-facing site hooks.
  */
 
-class Lytics
+class Lyticswp
 {
 
 	/**
@@ -31,12 +31,12 @@ class Lytics
 	 */
 	public function __construct()
 	{
-		if (defined('LYTICS_VERSION')) {
-			$this->version = LYTICS_VERSION;
+		if (defined('LYTICS_WP_VERSION')) {
+			$this->version = LYTICS_WP_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'lytics';
+		$this->plugin_name = 'lytics-wp';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -70,19 +70,19 @@ class Lytics
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-lytics-public.php';
 
-		$this->loader = new Lytics_Loader();
+		$this->loader = new Lyticswp_Loader();
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Lytics_i18n class in order to set the domain and to register the hook
+	 * Uses the Lyticswp_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 */
 	private function set_locale()
 	{
 
-		$plugin_i18n = new Lytics_i18n();
+		$plugin_i18n = new Lyticswp_i18n();
 
 		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
@@ -93,24 +93,25 @@ class Lytics
 	private function define_admin_hooks()
 	{
 
-		$plugin_admin = new Lytics_Admin($this->get_plugin_name(), $this->get_version());
+		$plugin_admin = new Lyticswp_Admin($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-		$this->loader->add_action('admin_menu', $plugin_admin, 'lytics_add_menu');
-		$this->loader->add_filter('plugin_action_links_lytics/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lytics_plugin_settings_link');
-		$this->loader->add_action('admin_post_lytics_process_form', $plugin_admin, 'lytics_handle_form_submission');
-		$this->loader->add_action('admin_init', $plugin_admin, 'lytics_register_settings');
-		$this->loader->add_action('admin_post_lytics_delete_settings', $plugin_admin, 'lytics_delete_settings');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_custom_code_editor');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_main_menu');
+		$this->loader->add_filter('plugin_action_links_lyticswp/' . $this->get_plugin_name() . '.php', $plugin_admin, 'lyticswp_settings_link');
+		$this->loader->add_action('admin_post_lyticswp_process_form', $plugin_admin, 'lyticswp_settings_handle_form_submission');
+		$this->loader->add_action('admin_init', $plugin_admin, 'register_lyticswp_settings');
+		$this->loader->add_action('admin_post_delete_lyticswp_settings', $plugin_admin, 'delete_lyticswp_settings');
 
 		// Widget
-		$this->loader->add_action('init', $plugin_admin, 'register_widget_post_type');
-		$this->loader->add_action('init', $plugin_admin, 'hide_default_widget_editor');
-		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_widget_meta_boxes');
-		$this->loader->add_action('save_post', $plugin_admin, 'save_widget_meta_box_data');
+		$this->loader->add_action('init', $plugin_admin, 'register_lyticswp_widget_post_type');
+		$this->loader->add_action('init', $plugin_admin, 'hide_default_lyticswp_widget_editor');
+		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_lyticswp_widget_meta_box');
+		$this->loader->add_action('save_post', $plugin_admin, 'save_lyticswp_widget_meta_box_data');
 
 		// Gutenberg
-		$this->loader->add_action('init', $plugin_admin, 'register_lytics_recommendations_block');
+		$this->loader->add_action('init', $plugin_admin, 'register_lyticswp_recommendation_block');
 	}
 
 	/**
@@ -119,12 +120,12 @@ class Lytics
 	private function define_public_hooks()
 	{
 
-		$plugin_public = new Lytics_Public($this->get_plugin_name(), $this->get_version());
+		$plugin_public = new Lyticswp_Public($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_published_widgets');
-		$this->loader->add_shortcode('lytics_greeting', $plugin_public, 'lytics_greeting_shortcode');
+		$this->loader->add_shortcode('lyticswp_greeting', $plugin_public, 'render_greeting_shortcode');
 	}
 
 	/**
