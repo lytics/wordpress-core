@@ -26,7 +26,7 @@ if (!$account_id || !$tag_enabled) {
 }
 
 $args = array(
-  'post_type' => 'widget',
+  'post_type' => 'lyticswp_widget',
   'posts_per_page' => -1,
 );
 
@@ -88,6 +88,7 @@ if ($query->have_posts()) {
     $js = lyticswpConvertJsonToJs($widget);
     $outputJS .= $js;
   }
+
   wp_reset_postdata();
 }
 
@@ -108,7 +109,7 @@ echo '
     var __ly_evaluate_widgets = function(entity){
       var segmentMembership = entity?.data?.user?.segments || []; 
       
-      ' . esc_html($outputJS) . '
+      ' . $outputJS . '
       
       __ly_render_widgets = [];
       __ly_modules.forEach(function(module){
