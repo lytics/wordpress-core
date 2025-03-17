@@ -795,10 +795,10 @@
     react-dom "^18.2.0"
     react-to-webcomponent "^2.0.0"
 
-"@lytics/recommendation-block@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@lytics/recommendation-block/-/recommendation-block-1.0.0.tgz#0709136da1fc3da73b86fe828bcd1721eb25e7bf"
-  integrity sha512-k/5VIghztpXsqpBwx8S/V6J4nbHO1RGtlIcW7fyUX+q2/WVFYBp6oNGvtLFgWAkHV2tlink7IbROZ0XkeC8HUw==
+"@lytics/recommendation-block@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@lytics/recommendation-block/-/recommendation-block-1.0.1.tgz#29cab164e2aee8326af8e07a4a1cc2e3f4cbb286"
+  integrity sha512-BUtheW74RSp6u0+icrgkaFVhtDJJ4V8RlaTZuT+/BClbt09M5R1phj9ONOEskkpixFAn8nt12Abu+L4Yo56hBw==
 
 "@material-ui/core@^4.12.4":
   version "4.12.4"
